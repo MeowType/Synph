@@ -4,24 +4,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "typescript",
-            "tsconfig": "tsconfig.test.json",
-            "option": "watch",
-            "problemMatcher": [
-                "$tsc-watch"
-            ]
-        },
-        {
-            "type": "npm",
-            "script": "rollup:watch",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "rollup:server:watch",
-            "problemMatcher": []
-        },
-        {
             "type": "npm",
             "script": "dev",
             "problemMatcher": []

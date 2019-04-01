@@ -77,4 +77,5 @@ typings/
 
 tsout
 
-test/*.js
+test/**/*.js
+test/**/*.js.map
