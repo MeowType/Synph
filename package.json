@@ -5,9 +5,15 @@
   "main": "synph.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "rollup:watch": "rollup -c rollup.config.test.js -w",
-    "rollup:server:watch": "rollup -c rollup.config.test.server.js -w",
-    "server": "node ./test/server/test.server.js"
+    "tsc:dev": "tsc -p tsconfig.test.json",
+    "tsc:dev:watch": "tsc -w -p tsconfig.test.json",
+    "rollup:dev": "rollup -c rollup.config.test.js",
+    "rollup:dev:watch": "rollup -c rollup.config.test.js -w",
+    "rollup:dev:server": "rollup -c rollup.config.test.server.js",
+    "rollup:dev:server:watch": "rollup -c rollup.config.test.server.js -w",
+    "server": "node ./test/server/test.server.js",
+    "dev:before": "npm run tsc:dev && npm run rollup:dev && npm run rollup:dev:server",
+    "dev": "npm run dev:before && node ./dev/dev.js"
   },
   "repository": {
     "type": "git",
