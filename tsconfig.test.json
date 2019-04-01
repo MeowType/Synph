@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "outDir": "test/tsout",
+        "sourceMap": true,
+        "esModuleInterop": true,
+    },
+    "include": [
+        "./test/**/*.ts",
+        "./test/**/*.tsx"
+    ],
+    "exclude": [
+        "tsout",
+        "node_modules"
+    ]
+}
