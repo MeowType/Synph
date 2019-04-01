@@ -15,6 +15,11 @@
             "type": "npm",
             "script": "rollup:watch",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "rollup:server:watch",
+            "problemMatcher": []
         }
     ]
 }
