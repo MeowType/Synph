@@ -4,9 +4,9 @@ import { render } from 'react-dom'
 document.addEventListener('DOMContentLoaded', () => {
     render(<Synph
         name='object'
-        syntax={function ({ syntaxOf, lexicalOf, groupOf}) {
+        syntax={function ({ syntaxOf, lexicalOf, groupOf }) {
             lexicalOf('object_start', '{')
-            groupOf('object_item', function ({ syntaxOf, lexicalOf, groupOf}) {
+            groupOf('object_item', function ({ syntaxOf, lexicalOf, groupOf }) {
                 syntaxOf('string')
                 lexicalOf('splitter', ':')
                 syntaxOf('value')
