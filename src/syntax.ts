@@ -33,6 +33,16 @@ export class Group extends ASyntax {
         this.items = items
     }
 }
+export class Loop extends ASyntax {
+    body: ISyntax
+    middle?: ISyntax
+    constructor(name: string, body: ISyntax, middle?: ISyntax) {
+        super(name)
+        this.body = body
+        this.middle = middle
+    }
+}
+
 
 export function syntaxOf(name: string) {
     return new Syntax(name)
@@ -46,7 +56,7 @@ export function groupOf(name: string, item: (ctx: Make) => void): Group
 export function groupOf(name: string, item: (this: Make, ctx: Make) => void): Group
 export function groupOf(name: string, item: () => IterableIterator<ISyntax>): Group
 export function groupOf(name: string, item: ISyntax, ...items: ISyntax[]): Group
-export function groupOf(name: string, item: ISyntax | (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Make) => void), ...items: ISyntax[]) {
+export function groupOf(name: string, item: ISyntax | BodyFunc, ...items: ISyntax[]) {
     if (typeof item === 'function') {
         if (item[Symbol.toStringTag] === 'GeneratorFunction') {
             return new Group(name, [...(item as any)()])
@@ -61,11 +71,17 @@ export function groupOf(name: string, item: ISyntax | (() => IterableIterator<IS
         return new Group(name, [item, ...items])
     }
 }
+export function loopOf(name: string, body: ISyntax | BodyFunc, middle?: ISyntax | BodyFunc) {
+    const b = body instanceof ASyntax ? body : groupOf(null, body)
+    const m = middle instanceof ASyntax ? middle : groupOf(null, middle)
+    return new Loop(name, b, m)
+}
 
+export type BodyFunc = (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Make) => void)
 export type Make = ReturnType<typeof Maker>
 export const Maker = (push: (v: ASyntax) => void) => {
     const o = {
-        syntaxOf, lexicalOf, groupOf
+        syntaxOf, lexicalOf, groupOf, loopOf
     }
     for (const key in o) {
         const element = o[key]

@@ -1,11 +1,11 @@
 export * from './range'
 export * from './syntax'
 import React from 'react'
-import { ISyntax, Make } from './syntax';
+import { ISyntax, BodyFunc } from './syntax';
 
 export function Synph(props: {
     name: string,
-    syntax: ISyntax[] | (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Make) => void)
+    syntax: ISyntax[] | BodyFunc
 }) {
     const { name, syntax } = props
     return <div className='synph'>
