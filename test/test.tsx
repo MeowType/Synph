@@ -1,8 +1,8 @@
-import { Synph, rangeOf, ISyntax, syntaxOf, lexicalOf as _lexicalOf, groupOf, loopOf } from '../src/synph'
+import { SynphItem, rangeOf, ISyntax, syntaxOf, lexicalOf as _lexicalOf, groupOf, loopOf } from '../src/synph'
 import { render } from 'react-dom'
 
 document.addEventListener('DOMContentLoaded', () => {
-    render(<Synph
+    render(<SynphItem
         name='object'
         syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf }) {
             lexicalOf('object_start', '{')
@@ -12,6 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 syntaxOf('value')
             }, _lexicalOf('comma', ',')).set_range(0)
             lexicalOf('object_end', '}')
-        }}></Synph>,
+        }}></SynphItem>,
         document.querySelector('#app'))
 })

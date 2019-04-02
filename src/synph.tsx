@@ -3,7 +3,7 @@ export * from './syntax'
 import React from 'react'
 import { ISyntax, BodyFunc } from './syntax';
 
-export function Synph(props: {
+export function SynphItem(props: {
     name: string,
     syntax: ISyntax[] | BodyFunc
 }) {
