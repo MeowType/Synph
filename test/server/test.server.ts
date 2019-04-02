@@ -14,10 +14,10 @@ app.use(mount('/test', f('./test/')))
 const port = process.argv[2] == null ? null : parseInt(process.argv[2])
 const server = app.listen(port)
 const address: AddressInfo = server.address() as AddressInfo
-console.log(`|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+console.log(`||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 
 test server run on  http://localhost:${address == null ? port : address.port}
 
 
-|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||`)
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||`)

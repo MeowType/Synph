@@ -1,5 +1,11 @@
+export * from './range'
+export * from './syntax'
 import React from 'react'
+import { ISyntax, Make } from './syntax';
 
-export function synph() {
-    return <div></div>
+export function Synph(props: {
+    name: string,
+    syntax: ISyntax[] | (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Make) => void)
+}) {
+    return <div>{123}</div>
 }
