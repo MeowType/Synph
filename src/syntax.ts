@@ -34,11 +34,11 @@ export class Group extends ASyntax {
     }
 }
 export class Loop extends ASyntax {
-    body: ISyntax
-    middle?: ISyntax
-    constructor(name: string, body: ISyntax, middle?: ISyntax) {
+    items: ISyntax[]
+    middle?: ISyntax[]
+    constructor(name: string, items: ISyntax[], middle?: ISyntax[]) {
         super(name)
-        this.body = body
+        this.items = items
         this.middle = middle
     }
 }
@@ -58,23 +58,29 @@ export function groupOf(name: string, item: () => IterableIterator<ISyntax>): Gr
 export function groupOf(name: string, item: ISyntax, ...items: ISyntax[]): Group
 export function groupOf(name: string, item: ISyntax | BodyFunc, ...items: ISyntax[]) {
     if (typeof item === 'function') {
-        if (item[Symbol.toStringTag] === 'GeneratorFunction') {
-            return new Group(name, [...(item as any)()])
-        } else {
-            const items = []
-            const ctx = Maker(items.push)
-            item.call(ctx, ctx)
-            return new Group(name, items)
-        }
-        
+        return new Group(name, body_func_call(item))
     } else {
         return new Group(name, [item, ...items])
     }
 }
 export function loopOf(name: string, body: ISyntax | BodyFunc, middle?: ISyntax | BodyFunc) {
-    const b = body instanceof ASyntax ? body : groupOf(null, body)
-    const m = middle instanceof ASyntax ? middle : groupOf(null, middle)
+    const b = body instanceof ASyntax ? [body] : body_func_call(body)
+    const m = middle instanceof ASyntax ? [middle] : body_func_call(middle)
     return new Loop(name, b, m)
+}
+
+export function body_func_call(fn: BodyFunc, arr?: ISyntax[]) {
+    if (arr == null) arr = []
+    if (typeof fn !== 'function') return arr
+    if (fn[Symbol.toStringTag] === 'GeneratorFunction') {
+        arr.push(...(fn as any)())
+    } else {
+        const items = []
+        const ctx = Maker(i => items.push(i))
+        fn.call(ctx, ctx)
+        arr.push(...items)
+    }
+    return arr
 }
 
 export type BodyFunc = (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Make) => void)
