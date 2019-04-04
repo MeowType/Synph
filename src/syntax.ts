@@ -1,11 +1,14 @@
 import { Range, rangeOf } from './range'
+import { uid } from 'uids'
 
 export type ISyntax = ASyntax
 export abstract class ASyntax {
+    id: string
     name: string
     range?: Range<any, any>
     constructor(name: string) {
         this.name = name
+        this.id = uid()
     }
     set_range(range: Range<any, any>): this
     set_range(from?: number, to?: number): this

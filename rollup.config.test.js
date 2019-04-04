@@ -1,3 +1,5 @@
+import resolve from 'rollup-plugin-node-resolve'
+
 export default {
     input: './test/tsout/test/test.js',
     output: {
@@ -9,5 +11,11 @@ export default {
             'react': 'React',
             'react-dom': 'ReactDOM'
         }
-    }
+    },
+    plugins: [
+        resolve(),
+    ],
+    external: [
+        'react', 'react-dom'
+    ]
 };
