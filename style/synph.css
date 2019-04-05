@@ -108,6 +108,9 @@
 .synph-loop-box, .synph-loop-item-box{
     transition: transform 0.25s;
 }
+.stretch .synph-loop-items-box{
+    flex: 1;
+}
 .synph-loop:hover>.synph-loop-content>.synph-loop-box{
     transform: scale(calc(1 / 1.7));
 }
@@ -130,12 +133,6 @@
 .synph-loop-items:hover>.synph-loop-item-box{
     transform: scale(calc(1 / 1.3));
 }
-.synph-loop:hover .synph-loop-items{
-    /* transform: scale(0.8); */
-}
-.synph-loop:hover .synph-loop-items:hover {
-    /* transform: scale(0.8) scale(1.3); */
-}
 
 .synph-loop-middle {
     background-color: hsla(357, 54%, 71%, 0.2);
@@ -152,12 +149,7 @@
 .synph-loop-middle:hover>.synph-loop-item-box{
     transform: scale(calc(1 / 1.3));
 }
-.synph-loop:hover .synph-loop-middle{
-    /* transform: scale(0.8); */
-}
-.synph-loop:hover .synph-loop-middle:hover {
-    /* transform: scale(0.8) scale(1.3); */
-}
+
 .synph-loop-middle::before{
     content: '';
     display: flex;
