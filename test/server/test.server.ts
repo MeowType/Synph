@@ -10,6 +10,7 @@ app.use(_.get('/', async (ctx) => {
     await send(ctx, `./test/server/index.html`)
 }))
 app.use(mount('/test', f('./test/')))
+app.use(mount('/style', f('./style/')))
 
 const port = process.argv[2] == null ? null : parseInt(process.argv[2])
 const server = app.listen(port)

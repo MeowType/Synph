@@ -80,20 +80,20 @@ export function make_range(range: Range<number, number>) {
             } else { // from..to
                 if (range.from < 1) {
                     if (range.to == 1) {
-                        ret = <code className='synph-range 0--1'>
+                        ret = <code className='synph-range 0..1'>
                             <span className='synph-range-from'>0</span>
                             <span></span>
                             <span className='synph-range-to'>1</span>
                         </code>
                     } else {
-                        ret = <code className='synph-range 0--n'>
+                        ret = <code className='synph-range 0..n'>
                             <span className='synph-range-from'>0</span>
                             <span></span>
                             <span className='synph-range-to'>{range.to}</span>
                         </code>
                     }
                 } else {
-                    ret = <code className='synph-range n--n'>
+                    ret = <code className='synph-range n..n'>
                         <span className='synph-range-from'>{range.from}</span>
                         <span></span>
                         <span className='synph-range-to'>{range.to}</span>
@@ -102,15 +102,15 @@ export function make_range(range: Range<number, number>) {
             }
         } else { // from..
             if (range.from < 1) { // 0..  x+
-                ret = <code className='synph-range 0--'>
+                ret = <code className='synph-range 0..'>
                     <span className='synph-range-from'>0</span>
                 </code>
             } else if(range.from == 1){ //1..
-                ret = <code className='synph-range 1--'>
+                ret = <code className='synph-range 1..'>
                     <span className='synph-range-from'>1</span>
                 </code>
             } else {
-                ret = <code className='synph-range n--'>
+                ret = <code className='synph-range n..'>
                     <span className='synph-range-from'>{range.from}</span>
                 </code>
             }
@@ -119,13 +119,13 @@ export function make_range(range: Range<number, number>) {
         if (range.to < 1) {
             ret = <></>
         } else if (range.to == 1) {
-            ret = <code className='synph-range 0--1'>
+            ret = <code className='synph-range 0..1'>
                 <span className='synph-range-from'>0</span>
                 <span></span>
                 <span className='synph-range-to'>1</span>
             </code>
         } else {
-            ret = <code className='synph-range 0--n'>
+            ret = <code className='synph-range 0..n'>
                 <span className='synph-range-from'>0</span>
                 <span></span>
                 <span className='synph-range-to'>{range.to}</span>
