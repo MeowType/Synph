@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <>
             <SynphItem
                 name='object'
-                stretch
                 syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf}) {
                     lexicalOf('object_start', '{')
                     loopOf('object_item', function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
@@ -19,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }}></SynphItem>
             <SynphItem
                 name='array'
-                stretch
                 syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
                     lexicalOf('array_start', '[')
                     loopOf('object_item', _syntaxOf('value'), _lexicalOf('comma', ',')).set_range('*')
