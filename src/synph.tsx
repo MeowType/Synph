@@ -6,13 +6,14 @@ import { ISyntax, BodyFunc, body_func_call, Lexical, Loop, Syntax } from './synt
 
 export function SynphItem(props: {
     name: string,
-    syntax: ISyntax[] | BodyFunc
+    syntax: ISyntax[] | BodyFunc,
+    stretch?: boolean
 }) {
-    const { name, syntax } = props
+    const { name, syntax, stretch } = props
     const [arr] = useState(() => syntax instanceof Array ? syntax : body_func_call(syntax))
     console.log(arr)
 
-    return <section className='synph-item'>
+    return <section className={`synph-item${stretch ? ' stretch' : ''}`}>
         <header className='synph-item-name'>{name}</header>
         <div className='synph-item-content'>{arr.map(s => SynphSyn(s))}</div>
     </section>

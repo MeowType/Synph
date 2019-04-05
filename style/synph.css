@@ -23,6 +23,9 @@
     margin-bottom: 1em;
     font-size: 1.2em;
 }
+.stretch .synph-item-content{
+    justify-content: space-around;
+}
 
 .synph-lexical {
     justify-content: center;
@@ -84,11 +87,20 @@
     background-color: rgb(230, 230, 230);
     transition: background 0.25s, transform 0.25s;
 }
+.stretch .synph-loop{
+    flex: 1;
+}
+.stretch .synph-loop {
+    justify-content: space-between;
+}
 .synph-loop:hover{
     transform: scale(1.7);
 }
 .synph-loop-content{
     transition: background 0.25s, transform 0.25s;
+}
+.stretch .synph-loop-content{
+    flex: 1;
 }
 .synph-loop:hover .synph-loop-content{
     transform: scale(0.8);
@@ -99,6 +111,11 @@
     transition: background 0.25s, transform 0.25s;
     border-radius: 0.2em;
     margin: 0.1em;
+    
+}
+.stretch .synph-loop-items{
+    justify-content: space-around;
+    flex: 1;
 }
 .synph-loop-items:hover{
     background-color: rgb(200, 200, 200);
