@@ -1,7 +1,7 @@
 .synph-item-content, 
 .synph-syn, 
 .synph-loop-content, .synph-loop-items,
-.synph-loop-middle
+.synph-loop-middle, .synph-loop-box, .synph-loop-item-box
  {
     display: flex;
     cursor: default;
@@ -102,8 +102,14 @@
 .stretch .synph-loop-content{
     flex: 1;
 }
-.synph-loop:hover .synph-loop-content{
-    transform: scale(0.8);
+.synph-loop:hover>.synph-range{
+    transform: scale(calc(1 / 1.7));
+}
+.synph-loop-box, .synph-loop-item-box{
+    transition: transform 0.25s;
+}
+.synph-loop:hover>.synph-loop-content>.synph-loop-box{
+    transform: scale(calc(1 / 1.7));
 }
 
 .synph-loop-items{
@@ -121,14 +127,14 @@
     background-color: rgb(200, 200, 200);
     transform: scale(1.3);
 }
-.synph-loop-items:hover>:nth-child(n){
-    transform: scale(0.8);
+.synph-loop-items:hover>.synph-loop-item-box{
+    transform: scale(calc(1 / 1.3));
 }
 .synph-loop:hover .synph-loop-items{
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
 }
 .synph-loop:hover .synph-loop-items:hover {
-    transform: scale(0.8) scale(1.3);
+    /* transform: scale(0.8) scale(1.3); */
 }
 
 .synph-loop-middle {
@@ -143,14 +149,14 @@
     background-color: hsla(357, 54%, 71%, 0.5);
     transform: scale(1.3);
 }
-.synph-loop-middle:hover>:nth-child(n){
-    transform: scale(0.8);
+.synph-loop-middle:hover>.synph-loop-item-box{
+    transform: scale(calc(1 / 1.3));
 }
 .synph-loop:hover .synph-loop-middle{
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
 }
 .synph-loop:hover .synph-loop-middle:hover {
-    transform: scale(0.8) scale(1.3);
+    /* transform: scale(0.8) scale(1.3); */
 }
 .synph-loop-middle::before{
     content: '';
