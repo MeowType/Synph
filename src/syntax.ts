@@ -10,13 +10,22 @@ export abstract class ASyntax {
         this.name = name
         this.id = uid()
     }
+    set_range(range: '+' | '*' | '?'): this
     set_range(range: Range<any, any>): this
     set_range(from?: number, to?: number): this
-    set_range(from?: number | Range<any, any>, to?: number) {
+    set_range(from?: number | Range<any, any> | '+' | '*' | '?', to?: number) {
         if (from instanceof Range) {
             this.range = from
         } else {
-            this.range = rangeOf(from, to)
+            if (from == '+') {
+                this.range = rangeOf(1)
+            } else if (from == '*') {
+                this.range = rangeOf(0)
+            } else if (from == '?') {
+                this.range = rangeOf(0, 1)
+            } else {
+                this.range = rangeOf(from, to)
+            }
         }
         return this
     }

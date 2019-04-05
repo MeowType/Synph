@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         syntaxOf('string')
                         lexicalOf('colon', ':')
                         syntaxOf('value')
-                    }, _lexicalOf('comma', ',')).set_range(0)
+                    }, _lexicalOf('comma', ',')).set_range('*')
                     lexicalOf('object_end', '}')
                 }}></SynphItem>
             <SynphItem
                 name='array'
                 syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf }) {
                     lexicalOf('array_start', '[')
-                    loopOf('object_item', _syntaxOf('value'), _lexicalOf('comma', ',')).set_range(0)
+                    loopOf('object_item', _syntaxOf('value'), _lexicalOf('comma', ',')).set_range('*')
                     lexicalOf('object_end', ']')
                 }}></SynphItem>
         </>,

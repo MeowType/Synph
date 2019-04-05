@@ -57,7 +57,9 @@ export function SynphLoop(props: { syn: Loop } & div) {
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <div className='synph-loop-content'>
             <section className='synph-loop-items'>{syn.items.map(i => SynphSyn(i))}</section>
-            {syn.middle == null ? <></> : <section className='synph-loop-middle'>{syn.middle.map(m => SynphSyn(m))}</section>}
+            <section className='synph-loop-middle'>
+                {syn.middle == null ? <></> : syn.middle.map(m => SynphSyn(m))}
+            </section>
         </div>
         {syn.range == null ? <></> : make_range(syn.range)}
     </article>
