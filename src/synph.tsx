@@ -2,7 +2,7 @@ export * from './range'
 export * from './syntax'
 import React, { useState } from 'react'
 import { Range } from './range'
-import { ISyntax, BodyFunc, body_func_call, Lexical, Loop, Syntax } from './syntax';
+import { ISyntax, BodyFunc, body_func_call, Lexical, Loop, Syntax, Group, Options } from './syntax';
 
 export function SynphItem(props: {
     name: string,
@@ -29,6 +29,10 @@ export function SynphSyn(syn: ISyntax) {
         return make(SynphLoop)
     } else if (syn instanceof Syntax) {
         return make(SynphSyntax)
+    } else if (syn instanceof Group) {
+        return make(SynphGroup)
+    } else if (syn instanceof Options) {
+        return make(SynphOption)
     }
     return <></>
 }
@@ -40,7 +44,15 @@ export function SynphSyntax(props: { syn: Syntax } & div) {
     const Class = 'synph-syntax'
     const { syn, className, ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        <code>{syn.name}</code>
+        {syn.range == null ? <code>{syn.name}</code> :
+            <section className='synph-group-box synph-group-items-box'>
+                <div className='synph-option-items'>
+                    <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+                        <code>{syn.name}</code>
+                    </article>
+                </div>
+                {make_range(syn.range)}
+            </section>}
     </article>
 }
 
@@ -48,7 +60,15 @@ export function SynphLexical(props: { syn: Lexical } & div) {
     const Class = 'synph-lexical'
     const { syn, className, ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        {syn.values.map(v => <code key={v}>{v}</code>)}
+        {syn.range == null ? syn.values.map(v => <code key={v}>{v}</code>) :
+            <section className='synph-group-box synph-group-items-box'>
+                <div className='synph-option-items'>
+                    <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+                        {syn.values.map(v => <code key={v}>{v}</code>)}
+                    </article>
+                </div>
+                {make_range(syn.range)}
+            </section>}
     </article>
 }
 
@@ -73,6 +93,32 @@ export function SynphLoop(props: { syn: Loop } & div) {
     </article>
 }
 
+export function SynphGroup(props: { syn: Group } & div) {
+    const Class = 'synph-group'
+    const { syn, className, ...p } = props
+    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+        <section className='synph-group-box synph-group-items-box'>
+            <div className='synph-group-items'>
+                {syn.items.map(i => <section className='synph-group-item-box'>{SynphSyn(i)}</section>)}
+            </div>
+        </section>
+        {syn.range == null ? <></> : make_range(syn.range)}
+    </article>
+}
+
+export function SynphOption(props: { syn: Options } & div) {
+    const Class = 'synph-option'
+    const { syn, className, ...p } = props
+    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+        <section className='synph-option-box synph-option-items-box'>
+            <div className='synph-option-items'>
+                <span></span>
+                {syn.items.map(i => <><section className='synph-option-item-box'>{SynphSyn(i)}</section><span></span></>)}
+            </div>
+        </section>
+        {syn.range == null ? <></> : make_range(syn.range)}
+    </article>
+}
 
 export function make_range(range: Range<number, number>) {
     console.log(range)

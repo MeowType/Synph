@@ -1,7 +1,11 @@
 .synph-item-content, 
 .synph-syn, 
 .synph-loop-content, .synph-loop-items,
-.synph-loop-middle, .synph-loop-box, .synph-loop-item-box
+.synph-loop-middle, .synph-loop-box, .synph-loop-item-box,
+.synph-group, .synph-option,
+.synph-group-box, .synph-option-box,
+.synph-group-items, .synph-option-items,
+.synph-group-item-box, .synph-option-item-box
  {
     display: flex;
     cursor: default;
@@ -86,6 +90,7 @@
     margin-right: 0.5em;
     background-color: rgb(230, 230, 230);
     transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 0 1em rgba(0,0,0,0.05);
 }
 .stretch .synph-loop{
     flex: 1;
@@ -122,6 +127,7 @@
     transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
     border-radius: 0.2em;
     margin: 0.1em;
+    box-shadow: 0 0 1em rgba(0,0,0,0.05);
 }
 .stretch .synph-loop-items{
     justify-content: space-around;
@@ -176,6 +182,42 @@
     transition: transform 2s;
 }
 
+
+.synph-group-box, .synph-option-box{
+    border-radius: 0.2em;
+    padding: 0.2em;
+    margin: 0.2em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: rgb(230, 230, 230);
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 0 1em rgba(0,0,0,0.05);
+}
+.synph-group-box:hover, .synph-option-box:hover{
+    transform: scale(1.7);
+    box-shadow: 0 0 1em rgba(0,0,0,0.1);
+}
+.synph-group-item-box, .synph-option-item-box{
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    align-items: center;
+}
+.synph-group-box:hover>.synph-group-items>.synph-group-item-box, 
+.synph-option-box:hover>.synph-option-items>.synph-option-item-box,
+.synph-option-box:hover>.synph-option-items>span:nth-of-type(n+2):not(:last-child){
+    transform: scale(calc(1 / 1.7));
+}
+
+.synph-option-items>span:nth-of-type(n+2):not(:last-child){
+    display: flex;
+    align-items: center;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+.synph-option-items>span:nth-of-type(n+2):not(:last-child)::before{
+    content: '|';
+}
+
+
 .synph-syn .synph-range {
     padding: 0.35em;
     display: flex;
@@ -183,7 +225,6 @@
     align-items: center;
     transition: background 0.25s, transform 0.25s;
 }
-
 
 .synph-range[class~='0..']>:nth-child(n), .synph-range[class~='0..1']>:nth-child(n), .synph-range[class~='1..']>:nth-child(n) {
     display: none;
