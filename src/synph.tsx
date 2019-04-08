@@ -1,8 +1,8 @@
-export * from './range'
+export * from './loop'
 export * from './syntax'
 import React, { useState } from 'react'
-import { Range } from './range'
-import { ISyntax, BodyFunc, body_func_call, Lexical, Loop, Syntax, Group, Options } from './syntax';
+import { Loop } from './loop'
+import { ISyntax, BodyFunc, body_func_call, Lexical, Syntax, Group, Options } from './syntax';
 
 export function SynphItem(props: {
     name: string,
@@ -25,8 +25,6 @@ export function SynphSyn(syn: ISyntax) {
     }
     if (syn instanceof Lexical) {
         return make(SynphLexical)
-    } else if (syn instanceof Loop) {
-        return make(SynphLoop)
     } else if (syn instanceof Syntax) {
         return make(SynphSyntax)
     } else if (syn instanceof Group) {
@@ -44,14 +42,14 @@ export function SynphSyntax(props: { syn: Syntax } & div) {
     const Class = 'synph-syntax'
     const { syn, className, ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        {syn.range == null ? <code>{syn.name}</code> :
+        {syn.loopfor == null ? <code>{syn.name}</code> :
             <section className='synph-group-box synph-group-items-box'>
                 <div className='synph-option-items'>
                     <article className={className == null ? Class : `${className} ${Class}`} {...p}>
                         <code>{syn.name}</code>
                     </article>
                 </div>
-                {make_range(syn.range)}
+                {make_range(syn.loopfor)}
             </section>}
     </article>
 }
@@ -60,19 +58,19 @@ export function SynphLexical(props: { syn: Lexical } & div) {
     const Class = 'synph-lexical'
     const { syn, className, ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        {syn.range == null ? syn.values.map(v => <code key={v}>{v}</code>) :
+        {syn.loopfor == null ? syn.values.map(v => <code key={v}>{v}</code>) :
             <section className='synph-group-box synph-group-items-box'>
                 <div className='synph-option-items'>
                     <article className={className == null ? Class : `${className} ${Class}`} {...p}>
                         {syn.values.map(v => <code key={v}>{v}</code>)}
                     </article>
                 </div>
-                {make_range(syn.range)}
+                {make_range(syn.loopfor)}
             </section>}
     </article>
 }
 
-export function SynphLoop(props: { syn: Loop } & div) {
+export function SynphLoop(props: { syn: ISyntax } & div) {
     const Class = 'synph-loop'
     const { syn, className, ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
@@ -102,7 +100,7 @@ export function SynphGroup(props: { syn: Group } & div) {
                 {syn.items.map(i => <section className='synph-group-item-box'>{SynphSyn(i)}</section>)}
             </div>
         </section>
-        {syn.range == null ? <></> : make_range(syn.range)}
+        {syn.loopfor == null ? <></> : make_range(syn.loopfor)}
     </article>
 }
 
@@ -116,26 +114,26 @@ export function SynphOption(props: { syn: Options } & div) {
                 {syn.items.map(i => <><section className='synph-option-item-box'>{SynphSyn(i)}</section><span></span></>)}
             </div>
         </section>
-        {syn.range == null ? <></> : make_range(syn.range)}
+        {syn.loopfor == null ? <></> : make_range(syn.loopfor)}
     </article>
 }
 
-export function make_range(range: Range<number, number>) {
+export function make_range(range: Loop) {
     console.log(range)
     let ret: JSX.Element
-    if (range.from != null) {
-        if (range.to != null && range.to >= range.from && range.to >= 0) { // from..to
-            if (range.to == range.from || range.to == 0) { // x
-                if (range.from < 2) {
+    if (range.min != null) {
+        if (range.max != null && range.max >= range.min && range.max >= 0) { // from..to
+            if (range.max == range.min || range.max == 0) { // x
+                if (range.min < 2) {
                     ret = <></>
                 } else {
                     ret = <code className='synph-range n'>
-                        <span className='synph-range-value'>{range.from}</span>
+                        <span className='synph-range-value'>{range.min}</span>
                     </code>
                 }
             } else { // from..to
-                if (range.from < 1) {
-                    if (range.to == 1) {
+                if (range.min < 1) {
+                    if (range.max == 1) {
                         ret = <code className='synph-range 0..1'>
                             <span className='synph-range-from'>0</span>
                             <span></span>
@@ -145,36 +143,36 @@ export function make_range(range: Range<number, number>) {
                         ret = <code className='synph-range 0..n'>
                             <span className='synph-range-from'>0</span>
                             <span></span>
-                            <span className='synph-range-to'>{range.to}</span>
+                            <span className='synph-range-to'>{range.max}</span>
                         </code>
                     }
                 } else {
                     ret = <code className='synph-range n..n'>
-                        <span className='synph-range-from'>{range.from}</span>
+                        <span className='synph-range-from'>{range.min}</span>
                         <span></span>
-                        <span className='synph-range-to'>{range.to}</span>
+                        <span className='synph-range-to'>{range.max}</span>
                     </code>
                 }
             }
         } else { // from..
-            if (range.from < 1) { // 0..  x+
+            if (range.min < 1) { // 0..  x+
                 ret = <code className='synph-range 0..'>
                     <span className='synph-range-from'>0</span>
                 </code>
-            } else if(range.from == 1){ //1..
+            } else if(range.min == 1){ //1..
                 ret = <code className='synph-range 1..'>
                     <span className='synph-range-from'>1</span>
                 </code>
             } else {
                 ret = <code className='synph-range n..'>
-                    <span className='synph-range-from'>{range.from}</span>
+                    <span className='synph-range-from'>{range.min}</span>
                 </code>
             }
         }
-    } else if (range.to != null) { // ..to
-        if (range.to < 1) {
+    } else if (range.max != null) { // ..to
+        if (range.max < 1) {
             ret = <></>
-        } else if (range.to == 1) {
+        } else if (range.max == 1) {
             ret = <code className='synph-range 0..1'>
                 <span className='synph-range-from'>0</span>
                 <span></span>
@@ -184,7 +182,7 @@ export function make_range(range: Range<number, number>) {
             ret = <code className='synph-range 0..n'>
                 <span className='synph-range-from'>0</span>
                 <span></span>
-                <span className='synph-range-to'>{range.to}</span>
+                <span className='synph-range-to'>{range.max}</span>
             </code>
         }
     } else { // ..

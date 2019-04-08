@@ -1,5 +1,5 @@
 import React from 'react'
-import { SynphItem, rangeOf, ISyntax, syntaxOf as _syntaxOf, lexicalOf as _lexicalOf, groupOf, loopOf, optionOf as _optionOf } from '../src/synph'
+import { SynphItem, rangeOf, ISyntax, syntaxOf as _syntaxOf, lexicalOf as _lexicalOf, groupOf, optionOf as _optionOf } from '../src/synph'
 import { render } from 'react-dom'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <>
             <SynphItem
                 name='object'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf}) {
+                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf}) {
                     lexicalOf('object_start', '{')
                     loopOf('object_item', function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
                         syntaxOf('string')
@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }}></SynphItem>
             <SynphItem
                 name='array'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     lexicalOf('array_start', '[')
                     loopOf('array_item', _syntaxOf('value'), _lexicalOf('comma', ',')).set_range('*')
                     lexicalOf('array_end', ']')
                 }}></SynphItem>
             <SynphItem
                 name='value'
-                syntax={[_optionOf('value', function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                syntax={[_optionOf('value', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     syntaxOf('string')
                     syntaxOf('number')
                     syntaxOf('object')

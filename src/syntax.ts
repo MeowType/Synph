@@ -1,31 +1,43 @@
-import { Range, rangeOf } from './range'
+import { Loop } from './loop'
 import { uid } from 'uids'
 
 export type ISyntax = ASyntax
 export abstract class ASyntax {
     id: string
     name: string
-    range?: Range<any, any>
+    loopfor?: Loop
+    middleItems?: ISyntax[]
     constructor(name: string) {
         this.name = name
         this.id = uid()
     }
-    set_range(range: '+' | '*' | '?'): this
-    set_range(range: Range<any, any>): this
-    set_range(from?: number, to?: number): this
-    set_range(from?: number | Range<any, any> | '+' | '*' | '?', to?: number) {
-        if (from instanceof Range) {
-            this.range = from
+    loop(range: '+' | '*' | '?'): this
+    loop(range: Loop): this
+    loop(from?: number, to?: number): this
+    loop(from?: number | Loop | '+' | '*' | '?', to?: number) {
+        if (from instanceof Loop) {
+            this.loopfor = from
         } else {
             if (from == '+') {
-                this.range = rangeOf(1)
+                this.loopfor = new Loop(1)
             } else if (from == '*') {
-                this.range = rangeOf(0)
+                this.loopfor = new Loop(0)
             } else if (from == '?') {
-                this.range = rangeOf(0, 1)
+                this.loopfor = new Loop(0, 1)
             } else {
-                this.range = rangeOf(from, to)
+                this.loopfor = new Loop(from, to)
             }
+        }
+        return this
+    }
+    middle(items: BodyFunc): this
+    middle(item: ISyntax, ...items: ISyntax[]): this
+    middle(item: ISyntax | BodyFunc, ...items: ISyntax[]) {
+        if (this.middleItems == null) this.middleItems = []
+        if (typeof item === 'function') {
+            this.middleItems.push(...body_func_call(item))
+        } else {
+            this.middleItems.push(item, ...items)
         }
         return this
     }
@@ -45,15 +57,6 @@ export class Group extends ASyntax {
         this.items = items
     }
 }
-export class Loop extends ASyntax {
-    items: ISyntax[]
-    middle?: ISyntax[]
-    constructor(name: string, items: ISyntax[], middle?: ISyntax[]) {
-        super(name)
-        this.items = items
-        this.middle = middle
-    }
-}
 export class Options extends ASyntax {
     items: ISyntax[]
     constructor(name: string, items: ISyntax[]) {
@@ -71,6 +74,8 @@ export function lexicalOf(name: string, value: string, ...values: string[]): Lex
 export function lexicalOf(name: string, ...values: string[]) {
     return new Lexical(name, values)
 }
+export function groupOf(name: string, iitemstem: BodyFunc): Group
+export function groupOf(name: string, item: ISyntax, ...items: ISyntax[]): Group
 export function groupOf(name: string, item: ISyntax | BodyFunc, ...items: ISyntax[]) {
     if (typeof item === 'function') {
         return new Group(name, body_func_call(item))
@@ -78,11 +83,8 @@ export function groupOf(name: string, item: ISyntax | BodyFunc, ...items: ISynta
         return new Group(name, [item, ...items])
     }
 }
-export function loopOf(name: string, body: ISyntax | BodyFunc, middle?: ISyntax | BodyFunc) {
-    const b = body instanceof ASyntax ? [body] : body_func_call(body)
-    const m = middle instanceof ASyntax ? [middle] : body_func_call(middle)
-    return new Loop(name, b, m)
-}
+export function optionOf(name: string, items: BodyFunc): Options
+export function optionOf(name: string, item: ISyntax, ...items: ISyntax[]): Options
 export function optionOf(name: string, item: ISyntax | BodyFunc, ...items: ISyntax[]) {
     if (typeof item === 'function') {
         return new Options(name, body_func_call(item))
@@ -109,7 +111,7 @@ export type BodyFunc = (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Ma
 export type Make = ReturnType<typeof Maker>
 export const Maker = (push: (v: ASyntax) => void) => {
     const o = {
-        syntaxOf, lexicalOf, groupOf, loopOf, optionOf
+        syntaxOf, lexicalOf, groupOf, optionOf
     }
     for (const key in o) {
         const element = o[key]
