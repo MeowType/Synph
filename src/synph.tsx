@@ -41,7 +41,7 @@ type div = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDiv
 export function SynphSyntax(props: { syn: Syntax } & div) {
     const Class = 'synph-syntax'
     const { syn, className, ...p } = props
-    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+    return check_need_loop(syn, <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         {syn.loopfor == null ? <code>{syn.name}</code> :
             <section className='synph-group-box synph-group-items-box'>
                 <div className='synph-option-items'>
@@ -49,45 +49,34 @@ export function SynphSyntax(props: { syn: Syntax } & div) {
                         <code>{syn.name}</code>
                     </article>
                 </div>
-                {make_range(syn.loopfor)}
             </section>}
-    </article>
+    </article>)
 }
 
 export function SynphLexical(props: { syn: Lexical } & div) {
     const Class = 'synph-lexical'
     const { syn, className, ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        {syn.loopfor == null ? syn.values.map(v => <code key={v}>{v}</code>) :
-            <section className='synph-group-box synph-group-items-box'>
-                <div className='synph-option-items'>
-                    <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-                        {syn.values.map(v => <code key={v}>{v}</code>)}
-                    </article>
-                </div>
-                {make_range(syn.loopfor)}
-            </section>}
+        <code>{syn.value}</code>
     </article>
 }
 
 export function SynphLoop(props: { syn: ISyntax } & div) {
     const Class = 'synph-loop'
-    const { syn, className, ...p } = props
+    const { syn, className, children , ...p } = props
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <div className='synph-loop-content'>
-            <section className='synph-loop-box synph-loop-items-box'>
-                <div className='synph-loop-items'>
-                    {syn.items.map(i => <section className='synph-loop-item-box'>{SynphSyn(i)}</section>)}
-                </div>
+            <section className='synph-loop-box synph-loop-items'>
+                {children}
             </section>
             <section className='synph-loop-box synph-loop-middle-box'>
                 <div className='synph-loop-middle'>
-                    {syn.middle == null ? <></> : syn.middle.map(m =>
-                        <section className='synph-loop-item-box'>{SynphSyn(m)}</section>)}
+                    {/* {syn.middle == null ? <></> : syn.middle.map(m =>
+                        <section className='synph-loop-item-box'>{SynphSyn(m)}</section>)} */}
                 </div>
             </section>
         </div>
-        {syn.range == null ? <></> : make_range(syn.range)}
+        {/* {syn.range == null ? <></> : make_range(syn.range)} */}
     </article>
 }
 
@@ -100,7 +89,7 @@ export function SynphGroup(props: { syn: Group } & div) {
                 {syn.items.map(i => <section className='synph-group-item-box'>{SynphSyn(i)}</section>)}
             </div>
         </section>
-        {syn.loopfor == null ? <></> : make_range(syn.loopfor)}
+        {/* {syn.loopfor == null ? <></> : make_range(syn.loopfor)} */}
     </article>
 }
 
@@ -114,8 +103,16 @@ export function SynphOption(props: { syn: Options } & div) {
                 {syn.items.map(i => <><section className='synph-option-item-box'>{SynphSyn(i)}</section><span></span></>)}
             </div>
         </section>
-        {syn.loopfor == null ? <></> : make_range(syn.loopfor)}
+        {/* {syn.loopfor == null ? <></> : make_range(syn.loopfor)} */}
     </article>
+}
+
+export function check_need_loop(syn: ISyntax, child: JSX.Element) {
+    if(syn.loopfor ==null){
+        return child
+    }else{
+        return <SynphLoop syn={syn}>{child}</SynphLoop>
+    }
 }
 
 export function make_range(range: Loop) {

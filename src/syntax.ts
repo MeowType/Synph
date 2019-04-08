@@ -44,10 +44,10 @@ export abstract class ASyntax {
 }
 export class Syntax extends ASyntax { }
 export class Lexical extends ASyntax {
-    values: string[]
-    constructor(name: string, values: string[]) {
+    value: string
+    constructor(name: string, value: string) {
         super(name)
-        this.values = values
+        this.value = value
     }
 }
 export class Group extends ASyntax { 
@@ -69,10 +69,8 @@ export class Options extends ASyntax {
 export function syntaxOf(name: string) {
     return new Syntax(name)
 }
-export function lexicalOf(name: string, value: string): Lexical
-export function lexicalOf(name: string, value: string, ...values: string[]): Lexical
-export function lexicalOf(name: string, ...values: string[]) {
-    return new Lexical(name, values)
+export function lexicalOf(name: string, value: string) {
+    return new Lexical(name, value)
 }
 export function groupOf(name: string, iitemstem: BodyFunc): Group
 export function groupOf(name: string, item: ISyntax, ...items: ISyntax[]): Group

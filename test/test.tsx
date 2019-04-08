@@ -1,5 +1,5 @@
 import React from 'react'
-import { SynphItem, rangeOf, ISyntax, syntaxOf as _syntaxOf, lexicalOf as _lexicalOf, groupOf, optionOf as _optionOf } from '../src/synph'
+import { SynphItem, ISyntax, syntaxOf as _syntaxOf, lexicalOf as _lexicalOf, groupOf, optionOf as _optionOf } from '../src/synph'
 import { render } from 'react-dom'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,18 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 name='object'
                 syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf}) {
                     lexicalOf('object_start', '{')
-                    loopOf('object_item', function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                    groupOf('object_item', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                         syntaxOf('string')
                         lexicalOf('colon', ':')
                         syntaxOf('value')
-                    }, _lexicalOf('comma', ',')).set_range('*')
+                    }).loop('*').middle(_lexicalOf('comma', ','))
                     lexicalOf('object_end', '}')
                 }}></SynphItem>
             <SynphItem
                 name='array'
                 syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     lexicalOf('array_start', '[')
-                    loopOf('array_item', _syntaxOf('value'), _lexicalOf('comma', ',')).set_range('*')
+                    groupOf('array_item', _syntaxOf('value')).loop('*').middle(_lexicalOf('comma', ','))
                     lexicalOf('array_end', ']')
                 }}></SynphItem>
             <SynphItem
@@ -36,12 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 })]}></SynphItem>
             <SynphItem
                 name='string'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     lexicalOf('string_start', '"')
-                    loopOf('string_body', _optionOf('string_body', function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                    groupOf('string_body', _optionOf('string_body', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                         syntaxOf('char')
                         syntaxOf('escape')
-                    })).set_range('*')
+                    })).loop('*')
                     lexicalOf('string_end', '"')
                 }}></SynphItem>
             <SynphItem
@@ -49,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 syntax={[_syntaxOf('Any UNICODE character except " or \\ or control character')]}></SynphItem>
             <SynphItem
                 name='escape'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     lexicalOf('escape_start', '\\')
-                    optionOf('escape_value', function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                    optionOf('escape_value', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                         lexicalOf('quotation mark', '"')
                         lexicalOf('reverse solidus', '\\')
                         lexicalOf('solidus', '/')
@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }}></SynphItem>
             <SynphItem
                 name='unicode escape'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, loopOf, optionOf }) {
+                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     lexicalOf('unicode', 'u')
-                    syntaxOf('hexadecimal digits').set_range(4)
+                    syntaxOf('hexadecimal digits').loop(4, 4)
                 }}></SynphItem>
         </>,
         document.querySelector('#app')
