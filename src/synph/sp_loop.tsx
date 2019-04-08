@@ -25,13 +25,13 @@ export function SynphLoop(props: { syn: ISyntax, items?: JSX.Element[] } & div) 
                     items == null ?
                         <div className='synph-loop-item'>{children}</div>
                         :
-                        items.map(i => <div className='synph-loop-item'>{i}</div>)
+                        items.map((i) => <div key={i.key} className='synph-loop-item'>{i}</div>)
                 }
             </section>
             <section className='synph-loop-box synph-loop-middle-box'>
                 <div className='synph-loop-middle'>
                     {syn.middleItems == null ? <></> : syn.middleItems.map(m =>
-                        <section className='synph-loop-item-box'>{SynphSyn(m)}</section>)}
+                        <section key={m.id} className='synph-loop-item-box'>{SynphSyn(m)}</section>)}
                 </div>
             </section>
         </div>

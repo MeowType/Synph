@@ -6,11 +6,11 @@ import { SynphSyn } from "./sp_syn";
 export function SynphGroup(props: { syn: Group } & div) {
     const Class = 'synph-group'
     const { syn, className, ...p } = props
-    return check_need_loop(syn, syn.items.map(i => <section className='synph-group-item-box'>{SynphSyn(i)}</section>),
+    return check_need_loop(syn, syn.items.map(i => <section key={i.id} className='synph-group-item-box'>{SynphSyn(i)}</section>),
         items => <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <section className='synph-group-box synph-group-items-box'>
             <div className='synph-group-items'>
-                {items}
+                {items.map(i=>i)}
             </div>
         </section>
     </article>)

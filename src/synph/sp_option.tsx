@@ -7,12 +7,13 @@ export function SynphOption(props: { syn: Options } & div) {
     const Class = 'synph-option'
     const { syn, className, ...p } = props
     return check_need_loop(syn,
-        [<span></span>, ...syn.items.flatMap(i =>
-            [<section className='synph-option-item-box'>{SynphSyn(i)}</section>, <span></span>])],
+        [<span key='-1'></span>, ...syn.items.flatMap((i, index) =>
+            [<section key={i.id} className='synph-option-item-box'>{SynphSyn(i)}</section>
+                , <span key={index}></span>])],
         items => <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <section className='synph-option-box synph-option-items-box'>
             <div className='synph-option-items'>
-                {items}
+                    {items}
             </div>
         </section>
     </article>)

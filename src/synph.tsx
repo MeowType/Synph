@@ -23,10 +23,3 @@ export function SynphItem(props: {
         <div className='synph-item-content'>{arr.map(s => SynphSyn(s))}</div>
     </section>
 }
-
-function a() { }
-
-function b() {
-    a()
-}
-b.prototype = Object.create(a.prototype)
