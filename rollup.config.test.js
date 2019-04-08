@@ -1,7 +1,8 @@
+import typescript from 'rollup-plugin-typescript2'
 import resolve from 'rollup-plugin-node-resolve'
 
 export default {
-    input: './test/tsout/test/test.js',
+    input: './test/test.tsx',
     output: {
         file: './test/test.js',
         format: 'iife',
@@ -13,6 +14,9 @@ export default {
         }
     },
     plugins: [
+        typescript({
+            tsconfig: './tsconfig.test.json'
+        }),
         resolve(),
     ],
     external: [

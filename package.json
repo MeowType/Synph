@@ -9,12 +9,8 @@
     "tsc:dev:watch": "tsc -w -p tsconfig.test.json",
     "rollup:dev": "rollup -c rollup.config.test.js",
     "rollup:dev:watch": "rollup -c rollup.config.test.js -w",
-    "rollup:dev:server": "rollup -c rollup.config.test.server.js",
-    "rollup:dev:server:watch": "rollup -c rollup.config.test.server.js -w",
     "server": "node ./test/server/test.server.js 3000",
-    "server:buildrun": "npm run tsc:dev && npm run rollup:dev:server && npm run server",
-    "dev:before": "npm run tsc:dev && npm run rollup:dev && npm run rollup:dev:server",
-    "dev": "npm run dev:before && node ./dev/dev.js"
+    "dev": "node ./dev/dev.js"
   },
   "repository": {
     "type": "git",
@@ -49,6 +45,7 @@
     "typescript": "^3.4.1"
   },
   "dependencies": {
+    "rollup-plugin-typescript2": "^0.20.1",
     "uids": "^1.0.2"
   }
 }

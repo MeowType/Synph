@@ -79,3 +79,5 @@ tsout
 
 test/**/*.js
 test/**/*.js.map
+
+.rpt2_cache
