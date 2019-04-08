@@ -1,5 +1,5 @@
 import React from 'react'
-import { SynphItem, ISyntax, syntaxOf as _syntaxOf, lexicalOf as _lexicalOf, groupOf, optionOf as _optionOf } from '../src/synph'
+import { SynphItem, ISyntax, syntax as _syntax, lexical as _lexical, group, option as _option } from '../src/synph'
 import { render } from 'react-dom'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,75 +7,69 @@ document.addEventListener('DOMContentLoaded', () => {
         <>
             <SynphItem
                 name='object'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf}) {
-                    lexicalOf('object_start', '{')
-                    groupOf('object_item', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                        syntaxOf('string')
-                        lexicalOf('colon', ':')
-                        syntaxOf('value')
-                    }).loop('*').middle(_lexicalOf('comma', ','))
-                    lexicalOf('object_end', '}')
+                syntax={function ({ syntax, lexical, group, option }) {
+                    lexical('object_start', '{')
+                    group('object_item', function ({ syntax, lexical, group, option }) {
+                        syntax('string')
+                        lexical('colon', ':')
+                        syntax('value')
+                    }).loop('*').middle(_lexical('comma', ','))
+                    lexical('object_end', '}')
                 }}></SynphItem>
             <SynphItem
                 name='array'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                    lexicalOf('array_start', '[')
-                    groupOf('array_item', _syntaxOf('value')).loop('*').middle(_lexicalOf('comma', ','))
-                    lexicalOf('array_end', ']')
+                syntax={function ({ syntax, lexical, group, option }) {
+                    lexical('array_start', '[')
+                    group('array_item', _syntax('value')).loop('*').middle(_lexical('comma', ','))
+                    lexical('array_end', ']')
                 }}></SynphItem>
             <SynphItem
                 name='value'
-                syntax={[_optionOf('value', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                    syntaxOf('string')
-                    syntaxOf('number')
-                    syntaxOf('object')
-                    syntaxOf('array')
-                    lexicalOf('bool', 'true')
-                    lexicalOf('bool', 'false')
-                    lexicalOf('null', 'null')
+                syntax={[_option('value', function ({ syntax, lexical, group, option }) {
+                    syntax('string')
+                    syntax('number')
+                    syntax('object')
+                    syntax('array')
+                    lexical('bool', 'true')
+                    lexical('bool', 'false')
+                    lexical('null', 'null')
                 })]}></SynphItem>
             <SynphItem
                 name='string'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                    lexicalOf('string_start', '"')
-                    optionOf('string_body', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                        syntaxOf('char')
-                        syntaxOf('escape')
+                syntax={function ({ syntax, lexical, group, option }) {
+                    lexical('string_start', '"')
+                    option('string_body', function ({ syntax, lexical, group, option }) {
+                        syntax('char')
+                        syntax('escape')
                     }).loop('*')
-                    lexicalOf('string_end', '"')
+                    lexical('string_end', '"')
                 }}></SynphItem>
             <SynphItem
                 name='char'
-                syntax={[_syntaxOf('Any UNICODE character except " or \\ or control character')]}></SynphItem>
+                syntax={[_syntax('Any UNICODE character except " or \\ or control character')]}></SynphItem>
             <SynphItem
                 name='escape'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                    lexicalOf('escape_start', '\\')
-                    optionOf('escape_value', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                        lexicalOf('quotation mark', '"')
-                        lexicalOf('reverse solidus', '\\')
-                        lexicalOf('solidus', '/')
-                        lexicalOf('backspace', 'b')
-                        lexicalOf('formfeed', 'f')
-                        lexicalOf('newline', 'n')
-                        lexicalOf('carriage return', 'r')
-                        lexicalOf('horizontal tab', 't')
-                        syntaxOf('unicode escape')
+                syntax={function ({ syntax, lexical, group, option }) {
+                    lexical('escape_start', '\\')
+                    option('escape_value', function ({ syntax, lexical, group, option }) {
+                        lexical('quotation mark', '"')
+                        lexical('reverse solidus', '\\')
+                        lexical('solidus', '/')
+                        lexical('backspace', 'b')
+                        lexical('formfeed', 'f')
+                        lexical('newline', 'n')
+                        lexical('carriage return', 'r')
+                        lexical('horizontal tab', 't')
+                        syntax('unicode escape')
                     })
                 }}></SynphItem>
             <SynphItem
                 name='unicode escape'
-                syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
-                    lexicalOf('unicode', 'u')
-                    syntaxOf('hexadecimal digits').loop(4, 4)
+                syntax={function ({ syntax, lexical, group, option }) {
+                    lexical('unicode', 'u')
+                    syntax('hexadecimal digits').loop(4, 4)
                 }}></SynphItem>
         </>,
         document.querySelector('#app')
     )
 })
-
-function a() {
-    return function b<A>(a: A) {
-        return a
-    }
-}
