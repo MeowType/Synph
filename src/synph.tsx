@@ -3,6 +3,7 @@ export * from './syntax'
 import React, { useState } from 'react'
 import { Loop } from './loop'
 import { ISyntax, BodyFunc, body_func_call, Lexical, Syntax, Group, Options } from './syntax';
+import { array } from 'prop-types';
 
 export function SynphItem(props: {
     name: string,
@@ -42,77 +43,82 @@ export function SynphSyntax(props: { syn: Syntax } & div) {
     const Class = 'synph-syntax'
     const { syn, className, ...p } = props
     return check_need_loop(syn, <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        {syn.loopfor == null ? <code>{syn.name}</code> :
-            <section className='synph-group-box synph-group-items-box'>
-                <div className='synph-option-items'>
-                    <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-                        <code>{syn.name}</code>
-                    </article>
-                </div>
-            </section>}
+        <code>{syn.name}</code>
     </article>)
 }
 
 export function SynphLexical(props: { syn: Lexical } & div) {
     const Class = 'synph-lexical'
     const { syn, className, ...p } = props
-    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+    return check_need_loop(syn, <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <code>{syn.value}</code>
-    </article>
-}
-
-export function SynphLoop(props: { syn: ISyntax } & div) {
-    const Class = 'synph-loop'
-    const { syn, className, children , ...p } = props
-    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
-        <div className='synph-loop-content'>
-            <section className='synph-loop-box synph-loop-items'>
-                {children}
-            </section>
-            <section className='synph-loop-box synph-loop-middle-box'>
-                <div className='synph-loop-middle'>
-                    {/* {syn.middle == null ? <></> : syn.middle.map(m =>
-                        <section className='synph-loop-item-box'>{SynphSyn(m)}</section>)} */}
-                </div>
-            </section>
-        </div>
-        {/* {syn.range == null ? <></> : make_range(syn.range)} */}
-    </article>
+    </article>)
 }
 
 export function SynphGroup(props: { syn: Group } & div) {
     const Class = 'synph-group'
     const { syn, className, ...p } = props
-    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+    return check_need_loop(syn, syn.items.map(i => <section className='synph-group-item-box'>{SynphSyn(i)}</section>),
+        items => <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <section className='synph-group-box synph-group-items-box'>
             <div className='synph-group-items'>
-                {syn.items.map(i => <section className='synph-group-item-box'>{SynphSyn(i)}</section>)}
+                {items}
             </div>
         </section>
         {/* {syn.loopfor == null ? <></> : make_range(syn.loopfor)} */}
-    </article>
+    </article>)
 }
 
 export function SynphOption(props: { syn: Options } & div) {
     const Class = 'synph-option'
     const { syn, className, ...p } = props
-    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+    return check_need_loop(syn,
+        [<span></span>, ...syn.items.flatMap(i =>
+            [<section className='synph-option-item-box'>{SynphSyn(i)}</section>, <span></span>])],
+        items => <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <section className='synph-option-box synph-option-items-box'>
             <div className='synph-option-items'>
-                <span></span>
-                {syn.items.map(i => <><section className='synph-option-item-box'>{SynphSyn(i)}</section><span></span></>)}
+                {items}
             </div>
         </section>
         {/* {syn.loopfor == null ? <></> : make_range(syn.loopfor)} */}
-    </article>
+    </article>)
 }
 
-export function check_need_loop(syn: ISyntax, child: JSX.Element) {
-    if(syn.loopfor ==null){
-        return child
-    }else{
-        return <SynphLoop syn={syn}>{child}</SynphLoop>
+export function check_need_loop(syn: ISyntax, items: JSX.Element[], child: (items: JSX.Element[]) => JSX.Element): JSX.Element
+export function check_need_loop(syn: ISyntax, child: JSX.Element): JSX.Element
+export function check_need_loop(syn: ISyntax, child: JSX.Element | JSX.Element[], childfn?: (items: JSX.Element[]) => JSX.Element) {
+    if (syn.loopfor == null) {
+        if (child instanceof Array) return childfn(child)
+        else return child
+    } else {
+        if (child instanceof Array) return <SynphLoop syn={syn} items={child}></SynphLoop>
+        else return <SynphLoop syn={syn}>{child}</SynphLoop>
     }
+}
+
+export function SynphLoop(props: { syn: ISyntax, items?: JSX.Element[] } & div) {
+    const Class = 'synph-loop'
+    const { syn, items, className, children, ...p } = props
+    return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
+        <div className='synph-loop-content'>
+            <section className='synph-loop-box synph-loop-items'>
+                {
+                    items == null ?
+                        <div className='synph-loop-item'>{children}</div>
+                        :
+                        items.map(i => <div className='synph-loop-item'>{i}</div>)
+                }
+            </section>
+            <section className='synph-loop-box synph-loop-middle-box'>
+                <div className='synph-loop-middle'>
+                    {syn.middleItems == null ? <></> : syn.middleItems.map(m =>
+                        <section className='synph-loop-item-box'>{SynphSyn(m)}</section>)}
+                </div>
+            </section>
+        </div>
+        {/* {syn.range == null ? <></> : make_range(syn.range)} */}
+    </article>
 }
 
 export function make_range(range: Loop) {

@@ -38,10 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 name='string'
                 syntax={function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                     lexicalOf('string_start', '"')
-                    groupOf('string_body', _optionOf('string_body', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
+                    optionOf('string_body', function ({ syntaxOf, lexicalOf, groupOf, optionOf }) {
                         syntaxOf('char')
                         syntaxOf('escape')
-                    })).loop('*')
+                    }).loop('*')
                     lexicalOf('string_end', '"')
                 }}></SynphItem>
             <SynphItem
