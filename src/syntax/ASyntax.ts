@@ -133,6 +133,26 @@ export abstract class ASyntax {
                     this.loopfor = new Loop(to, to)
                     console.error(new SyntaxError(`Illegal situation: \`aaa\${n}aaa\``))
                 }
+            } else { // `xxx${n}xxx${n}xxx`
+                let be = '', ae = ''
+                if (from[0] !== '') {
+                    be = 'aaa'
+                }
+                if (from[2] !== '') {
+                    ae = 'aaa'
+                }
+                if (from[1] === '') { // `${n}${n}`
+                    console.warn(new SyntaxError(`Should not use: \`${be}\${n}\${n}${ae}\`, use \`\${n}..\${n}\``))
+                } else {
+                    if (from[1] === '..') { // `${n}..${n}`
+                        if (be === 'aaa' || ae === 'aaa') {
+                            console.warn(new SyntaxError(`Should not use: \`${be}\${n}..\${n}${ae}\`, use \`\${n}..\${n}\``))
+                        }
+                    } else { // `${n}eee${n}`
+                        console.error(new SyntaxError(`Illegal situation: \`${be}\${n}aaa\${n}${ae}\`, use \`\${n}..\${n}\``))
+                    }
+                }
+                this.loopfor = new Loop(to, tto)
             }
         } else if (from instanceof Loop) {
             this.loopfor = from
