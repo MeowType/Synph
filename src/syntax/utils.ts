@@ -1,4 +1,4 @@
-import { ISyntax, ASyntax, syntax, lexical, group, option } from ".";
+import { ISyntax, ASyntax, syntax, lexical, group, option, range } from ".";
 
 export function body_func_call(fn: BodyFunc, arr?: ISyntax[]) {
     if (arr == null) arr = []
@@ -18,7 +18,7 @@ export type BodyFunc = (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Ma
 export type Make = ReturnType<typeof Maker>
 export const Maker = (push: (v: ASyntax) => void) => {
     const o = {
-        syntax, lexical, group, option
+        syntax, lexical, group, option, range
     }
     for (const key in o) {
         const element = o[key]
