@@ -11,7 +11,7 @@ export abstract class ASyntax {
         this.name = name
         this.id = uid()
     }
-    loop(strings: TemplateStringsArray, form: number, to?: number): this
+    loop(strings: TemplateStringsArray, form?: number, to?: number): this
     loop(range: '+' | '*' | '?'): this
     loop(range: string): this
     loop(range: Loop): this
