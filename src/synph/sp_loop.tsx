@@ -27,23 +27,20 @@ export function SynphLoop(props: { syn: ISyntax, tag: loop_range_tag, items?: JS
     
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <div className='synph-loop-content'>
-            <section className='synph-loop-box synph-loop-items'>
-                {
-                    items == null ?
-                        <div className='synph-loop-item'>{children}</div>
-                        :
-                        items.map((i) => <div key={i.key} className='synph-loop-item'>{i}</div>)
-                }
-            </section>
+            {React.createElement('section', { className: 'synph-loop-box synph-loop-items' },
+                ...(items == null ?
+                    [<div className='synph-loop-item'>{children}</div>]
+                    :
+                    items.map((i) => <div key={i.key} className='synph-loop-item'>{i}</div>))
+            )}
             <section className='synph-loop-box synph-loop-middle-box'>
-                <div className={`synph-loop-middle${tag == null ? '' : ` ${tag}`}`}>
-                    {make_loop_range(syn.loopfor, tag)}
-                    {syn.middleItems == null ? <></> : syn.middleItems.map(m =>
-                        <section key={m.id} className='synph-loop-item-box'>{SynphSyn(m)}</section>)}
-                </div>
+                {React.createElement('div', { className: `synph-loop-middle${tag == null ? '' : ` ${tag}`}` },
+                    make_loop_range(syn.loopfor, tag),
+                    ...(syn.middleItems == null ? [] : syn.middleItems.map(m =>
+                        <section key={m.id} className='synph-loop-item-box'>{SynphSyn(m)}</section>))
+                )}
             </section>
         </div>
-        
     </article>
 }
 

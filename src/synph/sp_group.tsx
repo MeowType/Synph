@@ -9,9 +9,7 @@ export function SynphGroup(props: { syn: Group } & div) {
     return check_need_loop(syn, syn.items.map(i => <section key={i.id} className='synph-group-item-box'>{SynphSyn(i)}</section>),
         items => <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <section className='synph-group-box synph-group-items-box'>
-            <div className='synph-group-items'>
-                {items.map(i=>i)}
-            </div>
+            {React.createElement('div', { className: 'synph-group-items' }, ...items)}
         </section>
     </article>)
 }

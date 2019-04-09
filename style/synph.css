@@ -198,18 +198,17 @@
     align-items: center;
 }
 .synph-group-box:hover>.synph-group-items>.synph-group-item-box, 
-.synph-option-box:hover>.synph-option-items>.synph-option-item-box,
-.synph-option-box:hover>.synph-option-items>span:nth-of-type(n+2):not(:last-child){
+.synph-option-box:hover>.synph-option-items>.synph-option-item-box{
     transform: scale(calc(1 / 1.7));
 }
 
-.synph-option-items>span:nth-of-type(n+2):not(:last-child){
+.synph-option-items>.synph-option-item-box:not(:last-child):not(:first-child)>span{
     display: flex;
     align-items: center;
     padding-left: 0.2em;
     padding-right: 0.2em;
 }
-.synph-option-items>span:nth-of-type(n+2):not(:last-child)::before{
+.synph-option-items>.synph-option-item-box:not(:last-child):not(:first-child)>span::before{
     content: '|';
 }
 

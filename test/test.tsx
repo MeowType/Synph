@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name='unicode escape'
                 syntax={function ({ syntax, lexical, group, option, range }) {
                     lexical('unicode', 'u')
-                    syntax('hexadecimal digits').loop`4`
+                    syntax('hexadecimal digits').loop('4')
                 }}></SynphItem>
         </>,
         document.querySelector('#app')
