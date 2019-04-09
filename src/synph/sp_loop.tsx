@@ -10,14 +10,21 @@ export function check_need_loop(syn: ISyntax, child: JSX.Element | JSX.Element[]
         if (child instanceof Array) return childfn(child)
         else return child
     } else {
-        if (child instanceof Array) return <SynphLoop syn={syn} items={child}></SynphLoop>
-        else return <SynphLoop syn={syn}>{child}</SynphLoop>
+        const range_tag = get_loop_range_tag(syn.loopfor)
+        if (range_tag === 'n') {
+            console.log(range_tag)
+            if (syn.loopfor.min == 0) return <></>
+            if (syn.loopfor.min == 1) return child instanceof Array ? childfn(child) : child
+        }
+        if (child instanceof Array) return <SynphLoop syn={syn} tag={range_tag} items={child}></SynphLoop>
+        else return <SynphLoop tag={range_tag} syn={syn}>{child}</SynphLoop>
     }
 }
 
-export function SynphLoop(props: { syn: ISyntax, items?: JSX.Element[] } & div) {
-    const Class = 'synph-loop'
-    const { syn, items, className, children, ...p } = props
+export function SynphLoop(props: { syn: ISyntax, tag: loop_range_tag, items?: JSX.Element[] } & div) {
+    const { syn, tag, items, className, children, ...p } = props
+    const Class = `synph-loop${tag == null ? '' : ` ${tag}`}`
+    
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <div className='synph-loop-content'>
             <section className='synph-loop-box synph-loop-items'>
@@ -29,85 +36,95 @@ export function SynphLoop(props: { syn: ISyntax, items?: JSX.Element[] } & div) 
                 }
             </section>
             <section className='synph-loop-box synph-loop-middle-box'>
-                <div className='synph-loop-middle'>
+                <div className={`synph-loop-middle${tag == null ? '' : ` ${tag}`}`}>
+                    {make_loop_range(syn.loopfor, tag)}
                     {syn.middleItems == null ? <></> : syn.middleItems.map(m =>
                         <section key={m.id} className='synph-loop-item-box'>{SynphSyn(m)}</section>)}
                 </div>
             </section>
         </div>
-        {/* {syn.range == null ? <></> : make_range(syn.range)} */}
+        
     </article>
 }
 
-export function make_range(range: Loop) {
-    console.log(range)
-    let ret: JSX.Element
+export type loop_range_tag = 'n' | '0..1' | '0..n' | 'n..n' | '0..' | '1..' | 'n..'
+export function get_loop_range_tag(range?: Loop): loop_range_tag {
+    if (range == null) return null
+    let ret: loop_range_tag = null
     if (range.min != null) {
         if (range.max != null && range.max >= range.min && range.max >= 0) { // from..to
             if (range.max == range.min || range.max == 0) { // x
-                if (range.min < 2) {
-                    ret = <></>
-                } else {
-                    ret = <code className='synph-range n'>
-                        <span className='synph-range-value'>{range.min}</span>
-                    </code>
-                }
+                ret = 'n'
             } else { // from..to
                 if (range.min < 1) {
                     if (range.max == 1) {
-                        ret = <code className='synph-range 0..1'>
-                            <span className='synph-range-from'>0</span>
-                            <span></span>
-                            <span className='synph-range-to'>1</span>
-                        </code>
+                        ret = '0..1'
                     } else {
-                        ret = <code className='synph-range 0..n'>
-                            <span className='synph-range-from'>0</span>
-                            <span></span>
-                            <span className='synph-range-to'>{range.max}</span>
-                        </code>
+                        ret = '0..n'
                     }
                 } else {
-                    ret = <code className='synph-range n..n'>
-                        <span className='synph-range-from'>{range.min}</span>
-                        <span></span>
-                        <span className='synph-range-to'>{range.max}</span>
-                    </code>
+                    ret = 'n..n'
                 }
             }
         } else { // from..
             if (range.min < 1) { // 0..  x+
-                ret = <code className='synph-range 0..'>
-                    <span className='synph-range-from'>0</span>
-                </code>
+                ret = '0..'
             } else if (range.min == 1) { //1..
-                ret = <code className='synph-range 1..'>
-                    <span className='synph-range-from'>1</span>
-                </code>
+                ret = '1..'
             } else {
-                ret = <code className='synph-range n..'>
-                    <span className='synph-range-from'>{range.min}</span>
-                </code>
+                ret = 'n..'
             }
         }
     } else if (range.max != null) { // ..to
-        if (range.max < 1) {
-            ret = <></>
+        if (range.max < 1) { // ..0
+            ret = 'n'
+            range.min = 0
         } else if (range.max == 1) {
-            ret = <code className='synph-range 0..1'>
-                <span className='synph-range-from'>0</span>
-                <span></span>
-                <span className='synph-range-to'>1</span>
-            </code>
+            ret = '0..1'
         } else {
-            ret = <code className='synph-range 0..n'>
-                <span className='synph-range-from'>0</span>
-                <span></span>
-                <span className='synph-range-to'>{range.max}</span>
-            </code>
+            ret = '0..n'
         }
     } else { // ..
-        ret = <></>
+        ret = null
     }
     return ret
+}
+
+export function make_loop_range(range: Loop, tag: loop_range_tag) {
+    if (tag == null || range == null) return <></>
+    if (tag == 'n') {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-value'>{range.min}</span>
+        </code>
+    } else if (tag == '0..1') {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-from'>0</span>
+            <span></span>
+            <span className='synph-loop-range-to'>1</span>
+        </code>
+    } else if (tag == '0..n') {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-from'>0</span>
+            <span></span>
+            <span className='synph-loop-range-to'>{range.max}</span>
+        </code>
+    } else if (tag == 'n..n') {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-from'>{range.min}</span>
+            <span></span>
+            <span className='synph-loop-range-to'>{range.max}</span>
+        </code>
+    } else if (tag == '0..') {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-from'>0</span>
+        </code>
+    } else if (tag == '1..') {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-from'>1</span>
+        </code>
+    } else {
+        return <code className={`synph-loop-range ${tag}`}>
+            <span className='synph-loop-range-from'>{range.min}</span>
+        </code>
+    }
 }

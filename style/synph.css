@@ -108,7 +108,7 @@
 .stretch .synph-loop-content{
     flex: 1;
 }
-.synph-loop:hover>.synph-range{
+.synph-loop:hover>.synph-loop-range{
     transform: scale(calc(1 / 1.7));
 }
 .synph-loop-box, .synph-loop-item-box{
@@ -118,30 +118,17 @@
 .stretch .synph-loop-items-box{
     flex: 1;
 }
-.synph-loop:hover>.synph-loop-content>.synph-loop-box{
+.synph-loop:hover>.synph-loop-content>.synph-loop-middle-box,
+.synph-loop:hover>.synph-loop-content>.synph-loop-items>.synph-loop-item{
     transform: scale(calc(1 / 1.7));
 }
 
 .synph-loop-items{
-    /* background-color: rgba(180, 180, 180, 0.5); */
     transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
-    /* border-radius: 0.2em;
-    margin: 0.1em;
-    box-shadow: 0 0 1em rgba(0,0,0,0.05); */
 }
-/* .stretch .synph-loop-items{
-    justify-content: space-around;
-    flex: 1;
-} */
-/* .synph-loop-items:hover{
-    background-color: rgb(200, 200, 200);
-    transform: scale(1.3);
-    box-shadow: 0 0 1em rgba(0,0,0,0.1);
+.synph-loop-item{
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
 }
-.synph-loop-items:hover>.synph-loop-item-box{
-    transform: scale(calc(1 / 1.3));
-} */
-
 .synph-loop-middle {
     background-color: hsla(357, 54%, 71%, 0.2);
     transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
@@ -162,10 +149,15 @@
 }
 
 .synph-loop-middle::before{
-    content: '';
     display: flex;
     width: 1.2em;
     height: 1.2em;
+    margin: 0.2em;
+    justify-content: center;
+    align-items: center;
+}
+.synph-loop-middle:not([class~='0..1'])::before{
+    content: '';
     mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='200' height='200'%3E%3Cpath d='M709.12 153.6H896c15.36 0 25.6-10.24 25.6-25.6s-10.24-25.6-25.6-25.6H640c-2.56 0-25.6 0-25.6 25.6v256c0 15.36 10.24 25.6 25.6 25.6s25.6-10.24 25.6-25.6V189.44c120.32 56.32 204.8 181.76 204.8 322.56 0 197.12-161.28 358.4-358.4 358.4S153.6 709.12 153.6 512c0-181.76 133.12-330.24 307.2-353.28v-51.2C258.56 130.56 102.4 302.08 102.4 512c0 225.28 184.32 409.6 409.6 409.6s409.6-184.32 409.6-409.6c0-153.6-84.48-289.28-212.48-358.4z'%3E%3C/path%3E%3C/svg%3E");
     -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='200' height='200'%3E%3Cpath d='M709.12 153.6H896c15.36 0 25.6-10.24 25.6-25.6s-10.24-25.6-25.6-25.6H640c-2.56 0-25.6 0-25.6 25.6v256c0 15.36 10.24 25.6 25.6 25.6s25.6-10.24 25.6-25.6V189.44c120.32 56.32 204.8 181.76 204.8 322.56 0 197.12-161.28 358.4-358.4 358.4S153.6 709.12 153.6 512c0-181.76 133.12-330.24 307.2-353.28v-51.2C258.56 130.56 102.4 302.08 102.4 512c0 225.28 184.32 409.6 409.6 409.6s409.6-184.32 409.6-409.6c0-153.6-84.48-289.28-212.48-358.4z'%3E%3C/path%3E%3C/svg%3E");
     mask-size: contain;
@@ -175,13 +167,17 @@
     mask-position: center;
     -webkit-mask-position: center;
     background-color: #454545;
-    margin: 0.2em;
 }
-.synph-loop-middle:hover::before{
+.synph-loop-middle:not([class~='0..1']):hover::before{
     transform: rotate(-720deg);
     transition: transform 2s;
 }
-
+.synph-loop-middle[class~='0..1']>:nth-child(n){
+    display: none;
+}
+.synph-loop-middle[class~='0..1']::before{
+    content: '?';
+}
 
 .synph-group-box, .synph-option-box{
     border-radius: 0.2em;
@@ -218,7 +214,7 @@
 }
 
 
-.synph-syn .synph-range {
+.synph-loop-range {
     padding: 0.35em;
     display: flex;
     justify-content: center;
@@ -226,24 +222,23 @@
     transition: background 0.25s, transform 0.25s;
 }
 
-.synph-range[class~='0..']>:nth-child(n), .synph-range[class~='0..1']>:nth-child(n), .synph-range[class~='1..']>:nth-child(n) {
+.synph-loop-range[class~='0..'],
+.synph-loop-range[class~='0..n']>:first-child {
     display: none;
 }
-.synph-range::before{
-    content: '{'
-}
-.synph-range::after{
-    content: '}'
-}
-.synph-range[class~='0..']::after, .synph-range[class~='0..1']::after, .synph-range[class~='1..']::after{
-    content: unset
-}
-.synph-range[class~='0..']::before{
+/* .synph-loop-range[class~='0..']::before{
     content: '*'
-}
-.synph-range[class~='1..']::before{
+} */
+.synph-loop-range[class~='n..']>:nth-child(n)::after,
+.synph-loop-range[class~='1..']>:nth-child(n)::after{
     content: '+'
 }
-.synph-range[class~='0..1']::before{
+/* .synph-loop-range[class~='0..1']::before{
     content: '?'
+} */
+.synph-loop-range[class~='0..n']>:nth-child(n)::before{
+    content: '<'
+}
+.synph-loop-range[class~='n..n']>:nth-child(2)::before{
+    content: '..'
 }
