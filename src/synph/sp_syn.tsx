@@ -1,6 +1,7 @@
-import { ISyntax, Lexical, SynphLexical, Syntax, SynphSyntax, Group, SynphGroup, Options, SynphOption } from "../synph";
+import { ISyntax, Lexical, SynphLexical, Syntax, SynphSyntax, Group, SynphGroup, Options, SynphOption, Range } from "../synph";
 import { tag } from "./tag";
 import React from "react";
+import { SynphRange } from "./sp_range";
 
 export function SynphSyn(syn: ISyntax) {
     function make(Fn: (props: { syn: ISyntax } & tag) => JSX.Element) {
@@ -14,6 +15,8 @@ export function SynphSyn(syn: ISyntax) {
         return make(SynphGroup)
     } else if (syn instanceof Options) {
         return make(SynphOption)
+    } else if (syn instanceof Range) {
+        return make(SynphRange)
     }
     return <></>
 }

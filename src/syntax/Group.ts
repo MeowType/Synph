@@ -9,6 +9,7 @@ export class Group extends ASyntax {
 }
 export function group(name: string, iitemstem: BodyFunc): Group
 export function group(name: string, item: ISyntax, ...items: ISyntax[]): Group
+export function group(name: string, ...items: ISyntax[]): Group
 export function group(name: string, item: ISyntax | BodyFunc, ...items: ISyntax[]) {
     if (typeof item === 'function') {
         return new Group(name, body_func_call(item))

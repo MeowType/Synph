@@ -69,6 +69,46 @@ document.addEventListener('DOMContentLoaded', () => {
                     lexical('unicode', 'u')
                     syntax('hexadecimal digits').loop('4')
                 }}></SynphItem>
+            <SynphItem
+                name='number'
+                syntax={function ({ syntax, lexical, group, option, range }) {
+                    lexical('-', '-').loop('?')
+                    syntax('int')
+                    group('', function ({ syntax, lexical, group, option, range }) {
+                        lexical('.', '.')
+                        syntax('digit').loop('+')
+                    }).loop('?')
+                    syntax('index').loop('?')
+                }}></SynphItem>
+            <SynphItem
+                name='int'
+                syntax={function ({ syntax, lexical, group, option, range }) {
+                    option('', function ({ syntax, lexical, group, option, range }) {
+                        lexical('0', '0')
+                        group('', function ({ syntax, lexical, group, option, range }) {
+                            range('digit 1-9', _lexical('1', '1'), _lexical('9', '9'))
+                            syntax('digit').loop('*')
+                        })
+                    })
+                }}></SynphItem>
+            <SynphItem
+                name='index'
+                syntax={function ({ syntax, lexical, group, option, range }) {
+                    option('', function ({ syntax, lexical, group, option, range }) {
+                        lexical('e', 'e')
+                        lexical('E', 'E')
+                    })
+                    option('', function ({ syntax, lexical, group, option, range }) {
+                        lexical('+', '+')
+                        lexical('-', '-')
+                    }).loop('?')
+                    syntax('digit').loop('+')
+                }}></SynphItem>
+            <SynphItem
+                name='digit'
+                syntax={function ({ syntax, lexical, group, option, range }) {
+                    range('digit', _lexical('0', '0'), _lexical('9', '9'))
+                }}></SynphItem>
         </>,
         document.querySelector('#app')
     )

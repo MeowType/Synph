@@ -6,9 +6,9 @@ export function SynphRange(props: { syn: Range } & div) {
     const Class = 'synph-range'
     const { syn, className, ...p } = props
     return check_need_loop(syn,
-        [<span key='-1'></span>, ...[syn.from, syn.to].flatMap((i, index) =>
+        [<section key='-1' className='synph-range-item-box'><span></span></section>, ...[syn.from, syn.to].flatMap((i, index) =>
             [<section key={i.id} className='synph-range-item-box'>{SynphSyn(i)}</section>
-                , <span key={index}></span>])],
+                , <section key={index} className='synph-range-item-box'><span></span></section>])],
         items => <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <section className='synph-range-box synph-range-items-box'>
             <div className='synph-range-items'>
