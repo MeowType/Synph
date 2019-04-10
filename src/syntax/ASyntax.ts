@@ -1,5 +1,6 @@
 import { Loop, BodyFunc, body_func_call } from "."
 import { uid } from 'uids'
+import { MouseEventHandler } from "react";
 
 export type ISyntax = ASyntax
 export abstract class ASyntax {
@@ -7,6 +8,7 @@ export abstract class ASyntax {
     name: string
     loopfor?: Loop
     middleItems?: ISyntax[]
+    onclick: (e: MouseEventHandler<HTMLElement>) => void
     constructor(name: string) {
         this.name = name
         this.id = uid()
