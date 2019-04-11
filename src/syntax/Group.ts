@@ -1,6 +1,6 @@
 import { ASyntax, ISyntax, BodyFunc, body_func_call } from ".";
 
-export class Group extends ASyntax {
+export class Group extends ASyntax<Group> {
     items: ISyntax[]
     constructor(name: string, items: ISyntax[]) {
         super(name)

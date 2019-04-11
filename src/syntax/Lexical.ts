@@ -1,6 +1,6 @@
-import { ASyntax } from ".";
+import { ASyntax, ASyntaxEvents, TheASyntax } from ".";
 
-export class Lexical extends ASyntax {
+export class Lexical extends ASyntax<Lexical> {
     value: string
     constructor(name: string, value: string) {
         super(name)

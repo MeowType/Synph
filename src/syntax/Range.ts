@@ -1,6 +1,6 @@
 import { ISyntax, ASyntax } from ".";
 
-export class Range extends ASyntax { 
+export class Range extends ASyntax<Range> { 
     from: ISyntax
     to: ISyntax
     constructor(name: string, from: ISyntax, to: ISyntax) {

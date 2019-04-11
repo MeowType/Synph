@@ -1,6 +1,6 @@
 import { ASyntax, ISyntax, BodyFunc, body_func_call } from ".";
 
-export class Options extends ASyntax {
+export class Options extends ASyntax<Options> {
     items: ISyntax[]
     constructor(name: string, items: ISyntax[]) {
         super(name)

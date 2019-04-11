@@ -10,9 +10,9 @@ export type ASyntaxEvents<S> = { [K in keyof Events<S>]: Events<S>[K] & { eventl
 export type GetCallEvents<A extends React.DOMAttributes<HTMLElement>, K extends keyof A> = { [P in K]: A[P] }
 export type CallEvents = GetCallEvents<React.DOMAttributes<HTMLElement>, EventsKey>
 
-export type ISyntax = TheASyntax
-export interface TheASyntax extends ASyntaxEvents<TheASyntax> { }
-export abstract class TheASyntax {
+export type ISyntax = TheASyntax<any>
+export interface TheASyntax<T extends TheASyntax<T>> extends ASyntaxEvents<T> { }
+export abstract class TheASyntax<T extends TheASyntax<T>> {
     id: string
     name: string
     loopfor?: Loop
