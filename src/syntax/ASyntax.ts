@@ -1,14 +1,20 @@
 import { Loop, BodyFunc, body_func_call } from "."
 import { uid } from 'uids'
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, EventHandler } from "react";
 
-export type ISyntax = ASyntax
-export abstract class ASyntax {
+type GetEventsKey<A extends React.DOMAttributes<HTMLElement>> = { [K in keyof A]: A[K] extends EventHandler<any> ? K : never }//EventHandler<HTMLElement>
+type EventsKey = GetEventsKey<React.DOMAttributes<HTMLElement>>[keyof GetEventsKey<React.DOMAttributes<HTMLElement>>]
+type GetEvents<A extends React.DOMAttributes<HTMLElement>, K extends keyof A, S> = { [P in K]: (cb: A[P]) => S }
+type Events<S> = GetEvents<React.DOMAttributes<HTMLElement>, EventsKey, S>
+type ASyntaxEvents<S> = { [K in keyof Events<S>]: Events<S>[K] & { eventlist: Set<React.DOMAttributes<HTMLElement>[EventsKey]> } }
+
+export type ISyntax = TheASyntax
+export interface TheASyntax extends ASyntaxEvents<TheASyntax> { }
+export abstract class TheASyntax {
     id: string
     name: string
     loopfor?: Loop
     middleItems?: ISyntax[]
-    onclick: (e: MouseEventHandler<HTMLElement>) => void
     constructor(name: string) {
         this.name = name
         this.id = uid()
@@ -19,7 +25,7 @@ export abstract class ASyntax {
     loop(range: Loop): this
     loop(from?: number, to?: number): this
     loop(from?: number | Loop | '+' | '*' | '?' | string | TemplateStringsArray, to?: number, tto?: number) {
-        function check_str(self: ASyntax, str: string) {
+        function check_str(self: ISyntax, str: string) {
             if (typeof str !== 'string') return false
             if (str === '..') {
                 self.loopfor = new Loop(0, 0)
@@ -177,3 +183,28 @@ export abstract class ASyntax {
         return this
     }
 }
+export const ASyntax: typeof TheASyntax = new Proxy(TheASyntax, {
+    construct(target, arg) {
+        return new Proxy<ISyntax>(new (target as any)(...arg), {
+            get(target, p, rec) {
+                if (typeof p === 'string') {
+                    if (p.substr(0, 2).toLowerCase() === 'on') {
+                        if (Reflect.has(target, p)) {
+                            return Reflect.get(target, p, rec)
+                        } else {
+                            const eventlist = new Set<React.DOMAttributes<HTMLElement>[EventsKey]>()
+                            function reg(cb: React.DOMAttributes<HTMLElement>[EventsKey]) {
+                                eventlist.add(cb)
+                                return rec
+                            }
+                            (reg as any).eventlist = eventlist
+                            Reflect.set(target, p, reg, rec)
+                            return reg
+                        }
+                    }
+                }
+                return Reflect.get(target, p, rec)
+            }
+        })
+    }
+})
