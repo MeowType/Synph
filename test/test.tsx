@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         lexical('colon', ':')
                         syntax('value')
                     }).loop('*').middle(_lexical('comma', ','))
-                    lexical('object_end', '}')
+                    lexical('object_end', '}').onClick(e => {
+                        console.log('click', e)
+                    })
                 }}></SynphItem>
             <SynphItem
                 name='array'

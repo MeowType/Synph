@@ -16,7 +16,7 @@ export function body_func_call(fn: BodyFunc, arr?: ISyntax[]) {
 
 export type BodyFunc = (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Make) => void)
 export type Make = ReturnType<typeof Maker>
-export const Maker = (push: (v: ASyntax) => void) => {
+export const Maker = (push: (v: ISyntax) => void) => {
     const o = {
         syntax, lexical, group, option, range
     }

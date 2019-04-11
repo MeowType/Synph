@@ -2,6 +2,7 @@ import { ISyntax, Loop } from "../synph";
 import React from "react";
 import { div } from "./tag";
 import { SynphSyn } from "./sp_syn";
+import { getOn } from "./getOn";
 
 export function check_need_loop(syn: ISyntax, items: JSX.Element[], child: (items: JSX.Element[]) => JSX.Element): JSX.Element
 export function check_need_loop(syn: ISyntax, child: JSX.Element): JSX.Element
@@ -24,10 +25,11 @@ export function check_need_loop(syn: ISyntax, child: JSX.Element | JSX.Element[]
 export function SynphLoop(props: { syn: ISyntax, tag: loop_range_tag, items?: JSX.Element[] } & div) {
     const { syn, tag, items, className, children, ...p } = props
     const Class = `synph-loop${tag == null ? '' : ` ${tag}`}`
+    const ons = getOn(syn)
     
     return <article className={className == null ? Class : `${className} ${Class}`} {...p}>
         <div className='synph-loop-content'>
-            {React.createElement('section', { className: 'synph-loop-box synph-loop-items' },
+            {React.createElement('section', { className: 'synph-loop-box synph-loop-items', ...(items == null ? {} : ons) },
                 ...(items == null ?
                     [<div className='synph-loop-item'>{children}</div>]
                     :
