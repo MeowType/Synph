@@ -17,7 +17,7 @@ export function SynphItem(props: {
     const { name, syntax, stretch } = props
     const [arr] = useState(() => syntax instanceof Array ? syntax : body_func_call(syntax))
     console.log(arr)
-    const content = arr.length <= 1 ? arr : [group(name, ...arr)]
+    const content = arr.length <= 1 ? arr : [(group as any)(name, ...arr)]
 
     return <section className={`synph-item${stretch ? ' stretch' : ''}`}>
         <header className='synph-item-name'>{name}</header>

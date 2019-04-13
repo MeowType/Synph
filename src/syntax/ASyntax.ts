@@ -2,7 +2,7 @@ import { Loop, BodyFunc, body_func_call, unset } from "."
 import { uid } from 'uids'
 import { EventHandler } from "react";
 
-export type GetEventsKey<A extends React.DOMAttributes<HTMLElement>> = { [K in keyof A]: A[K] extends EventHandler<any> ? K : never }//EventHandler<HTMLElement>
+export type GetEventsKey<A extends React.DOMAttributes<HTMLElement>> = { [K in keyof A]: A[K] extends EventHandler<any> ? K : never }
 export type EventsKey = GetEventsKey<React.DOMAttributes<HTMLElement>>[keyof GetEventsKey<React.DOMAttributes<HTMLElement>>]
 export type GetEvents<A extends React.DOMAttributes<HTMLElement>, K extends keyof A, S> = { [P in K]: (cb: A[P]) => S }
 export type Events<S> = GetEvents<React.DOMAttributes<HTMLElement>, EventsKey, S>

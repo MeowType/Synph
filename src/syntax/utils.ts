@@ -13,7 +13,7 @@ export function body_func_call(fn: BodyFunc, arr?: ISyntax[]) {
         fn.call(ctx, ctx)
         arr.push(...items)
     }
-    return unsetlist.size == 0 ? arr : arr.filter(i => unsetlist.delete(i))
+    return unsetlist.size == 0 ? arr : arr.filter(i => !unsetlist.delete(i))
 }
 
 export type otype = {
@@ -33,7 +33,7 @@ export function Maker(push: (v: ISyntax) => void, unset: unset): RemoveParentUns
         const element = o[key]
         if (typeof element === 'function') {
             o[key] = function () {
-                const r = element.apply(this, unset, arguments)
+                const r = element.call(this, unset, ...arguments)
                 push(r)
                 return r
             }
