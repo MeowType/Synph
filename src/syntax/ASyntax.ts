@@ -1,4 +1,4 @@
-import { Loop, BodyFunc, body_func_call } from "."
+import { Loop, BodyFunc, body_func_call, unset } from "."
 import { uid } from 'uids'
 import { EventHandler } from "react";
 
@@ -17,9 +17,11 @@ export abstract class TheASyntax<T extends TheASyntax<T>> {
     name: string
     loopfor?: Loop
     middleItems?: ISyntax[]
-    constructor(name: string) {
-        this.name = name
+    private unset: unset
+    constructor(thisunset: unset, name?: string) {
+        if (name != null) this.name = name
         this.id = uid()
+        this.unset = thisunset
     }
     loop(strings: TemplateStringsArray, form?: number, to?: number): this
     loop(range: '+' | '*' | '?'): this
@@ -180,6 +182,7 @@ export abstract class TheASyntax<T extends TheASyntax<T>> {
         if (typeof item === 'function') {
             this.middleItems.push(...body_func_call(item))
         } else {
+            this.unset(item, ...items)
             this.middleItems.push(item, ...items)
         }
         return this

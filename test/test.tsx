@@ -1,5 +1,5 @@
 import React from 'react'
-import { SynphItem, ISyntax, syntax as _syntax, lexical as _lexical, group, option as _option, range } from '../src/synph'
+import { SynphItem, ISyntax, syntax, lexical, group, option, range } from '../src/synph'
 import { render } from 'react-dom'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         syntax('string')
                         lexical('colon', ':')
                         syntax('value')
-                    }).loop('*').middle(_lexical('comma', ','))
+                    }).loop('*').middle(lexical('comma', ','))
                     lexical('object_end', '}').onClick(e => {
                         console.log('click', e)
                     })
@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 name='array'
                 syntax={function ({ syntax, lexical, group, option, range }) {
                     lexical('array_start', '[')
-                    group('array_item', _syntax('value')).loop('*').middle(_lexical('comma', ','))
+                    group('array_item', syntax('value')).loop('*').middle(lexical('comma', ','))
                     lexical('array_end', ']')
                 }}></SynphItem>
             <SynphItem
                 name='value'
-                syntax={[_option('value', function ({ syntax, lexical, group, option, range }) {
+                syntax={[option('value', function ({ syntax, lexical, group, option, range }) {
                     syntax('string')
                     syntax('number')
                     syntax('object')
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }}></SynphItem>
             <SynphItem
                 name='char'
-                syntax={[_syntax('Any UNICODE character except " or \\ or control character')]}></SynphItem>
+                syntax={[syntax('Any UNICODE character except " or \\ or control character')]}></SynphItem>
             <SynphItem
                 name='escape'
                 syntax={function ({ syntax, lexical, group, option, range }) {
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     option('', function ({ syntax, lexical, group, option, range }) {
                         lexical('0', '0')
                         group('', function ({ syntax, lexical, group, option, range }) {
-                            range('digit 1-9', _lexical('1', '1'), _lexical('9', '9'))
+                            range('digit 1-9', lexical('1', '1'), lexical('9', '9'))
                             syntax('digit').loop('*')
                         })
                     })
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <SynphItem
                 name='digit'
                 syntax={function ({ syntax, lexical, group, option, range }) {
-                    range('digit', _lexical('0', '0'), _lexical('9', '9'))
+                    range('digit', lexical('0', '0'), lexical('9', '9'))
                 }}></SynphItem>
         </>,
         document.querySelector('#app')
