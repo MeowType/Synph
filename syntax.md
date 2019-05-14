@@ -39,6 +39,7 @@
 - `~` \<any>
 ## special char
 Special characters cannot be in the token string  
+
 |char|mean|  
 |-|-|  
 |`u`|any unicode char|
@@ -62,6 +63,7 @@ Special characters cannot be in the token string
 |`eof`|end of file|
 ## suffix
 Suffixes can be used with special characters  
+
 |suffix|mean|  
 |-|-|  
 |`i`|ignore case|
