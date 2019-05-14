@@ -41,6 +41,7 @@
 - `~` \<any>
 ## special char
 Special characters cannot be in the token string  
+
 |char|mean|  
 |-|-|  
 |`any`|any char|
@@ -64,6 +65,7 @@ Special characters cannot be in the token string
 |`eoa`|end of all|
 ## suffix
 Suffixes can be used with special characters  
+
 |suffix|mean|  
 |-|-|  
 |`i`|ignore case|
