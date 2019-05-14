@@ -1,15 +1,16 @@
 # `.synph` Syntax
 ## alias
-- \<new name> `=` \<old name>
+- \<no space name> \<any>
+- ``` ` ``` \<any name> ``` ` ``` \<any>
+## var
+- \<no space name> `=` \<any>
+- ``` ` ``` \<any name> ``` ` ``` `=` \<any>
 ## group
 - `{` [group body] `}`
-- \<group name\> `=` `{` [group body] `}`
 ## or group
 - `[` [group body] `]`
-- \<group name\> `=` `[` [group body] `]`
 ## and group
 - `&[` [group body] `]`
-- \<group name\> `=` `&[` [group body] `]`
 ## grammar
 - \<no space grammar name>
 - ``` ` ``` \<any grammar name> ``` ` ```
@@ -64,36 +65,50 @@ Suffixes can be used with special characters
 |suffix|mean|  
 |-|-|  
 |`i`|ignore case|
+## end
+- `;`
+## subrange
+- \<any define> `where {` \<subrange> `}`
+## Use matching content
+```synph
+xml {
+    '<' tag=tagName attr* '>'
+    xml*
+    '</' tag '>'
+} where {
+    attr { w '=' string }
+}
+```
 # JSON example
 ```synph
-object = {
+object {
     '{' { key=string ':' value=value }(',')* '}'
 }
 
-array = {
+array {
     '[' value(',')* ']'
 }
 
-value = [
+value [
     string number object array
     'true' 'false' 'null'
 ]
 
-string = {
+string {
     '"' [ char escape ]*  '"'
 }
-char = &[ u ~`all control character` ]
-`control character` = [ '"' '\\' '/' 'b' 'f' 'n' 'r' 't' ]
-`all control character` = [ `control character` 'u' ]
-escape = {
+char &[ u ~`all control character` ]
+`control character` [ '"' '\\' '/' 'b' 'f' 'n' 'r' 't' ]
+`all control character` [ `control character` 'u' ]
+escape {
     '\\' [ `control character` `escape escape` ]
 }
-`escape escape` = { 'u' `hexadecimal digits`4 }
+`escape escape` { 'u' `hexadecimal digits`4 }
 
-number = {
+number {
     '-'? int { '.' digit+ }? index? 
 }
-digit = '0'-'9'
-int = [ '0' { '1'-'9' digit* } ]
-index = 'e'i ['+' '-']? digit+
+digit '0'-'9'
+int [ '0' { '1'-'9' digit* } ]
+index 'e'i ['+' '-']? digit+
 ```
