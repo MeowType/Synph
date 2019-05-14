@@ -11,7 +11,7 @@ export function SynphItem(props: ({
     syntax: Item,
 }) & { stretch?: boolean } & div) {
     const Class = 'synph-item'
-    const { name, syntax, stretch, className, ...p } = props as {
+    const { name, syntax, stretch, className, key, ...p } = props as {
         name?: string,
         syntax: ISyntax[] | BodyFunc | Item,
         stretch?: boolean
@@ -19,18 +19,18 @@ export function SynphItem(props: ({
     let syn = syntax
     let Name = name;
     let ons: CallEvents = {}
-    let key = p.key
+    let id = key
     if (syn instanceof Item) {
         Name = syn.name
         ons = getOn(syn)
-        key = syn.id
+        id = syn.id
         syn = syn.items
     }
     const [arr] = useState(() => syn instanceof Array ? syn : body_func_call(syn as any))
     console.log(arr)
     const content = arr.length <= 1 ? arr : [(group as any)(Name, ...arr)]
 
-    return <section className={`${className == null ? Class : `${Class} ${className}`}${stretch ? ' stretch' : ''}`} key={key} {...p} {...ons}>
+    return <section className={`${className == null ? Class : `${Class} ${className}`}${stretch ? ' stretch' : ''}`} key={id} {...p} {...ons}>
         <header className='synph-item-name'>{Name}</header>
         {React.createElement('div', { className: `synph-item-content` }, ...content.map(s => SynphSyn(s)))}
     </section>
