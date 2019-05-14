@@ -21,7 +21,7 @@
 - \<token> `-` \<token>
 ## loop
 - \<any> \<loop type>
-- \<any> '(' \<loop by> ')' \<loop type>
+- \<any> `(` \<loop by> `)` \<loop type>
 ## loop type
 |type|mean|  
 |-|-|  
@@ -30,23 +30,24 @@
 |`+`|>=1|  
 |`5`|just 5 times|  
 |`0..5`|>=0 and <=5|  
-|`..5`|<=5|  
-|`5..` or `5+`|>=5|  
-|`..<5` |<5|  
-|`5<..`|>5|  
+|`..5` or `<=5`|<=5|  
+|`5..` or `5+` or `>=5`|>=5|  
+|`..<5` or `<5` |<5|  
+|`5<..` or `>5`|>5|  
 |`5?`|0 or 5|  
+|`5<..?` or `>5?`|0 or >5|  
+|`5..?` or `5+?` or `>=5?`|0 or >=5|  
 ## not
 - `~` \<any>
 ## special char
 Special characters cannot be in the token string  
 |char|mean|  
 |-|-|  
+|`any`|any char|
 |`u`|any unicode char|
 |`d`|`'0'-'9'`|
-|`n`|`\n`|
-|`r`|`\r`|
-|`f`|`\f`|
-|`t`|`\t`|
+|`n`|`['\n' '\r' '\r\n']`|
+|`t`|`'\t'`|
 |`4t`|x space tab|
 |`nt`|new indented block|
 |`n2t`|new x space indented block|
@@ -59,24 +60,30 @@ Special characters cannot be in the token string
 |`a`|`'a'-'z'`|
 |`s`|any space char|
 |`b`|word bound|
-|`eof`|end of file|
+|`soa`|start of all|
+|`eoa`|end of all|
 ## suffix
 Suffixes can be used with special characters  
 |suffix|mean|  
 |-|-|  
 |`i`|ignore case|
+## ignore
+- `!` \<any>
 ## end
 - `;`
 ## subrange
-- \<any define> `where {` \<subrange> `}`
+- `do {` \<subrange> \<last to return> `}`
 ## Use matching content
+xml example
 ```synph
-xml {
-    '<' tag=tagName attr* '>'
-    xml*
-    '</' tag '>'
-} where {
-    attr { w '=' string }
+xml do {
+    id &[u ~s]
+    attr { name=id '=' value=string }
+    {
+        '<' tag=id {!s attrs=attr(!s)*}? '>'
+            childs=xml*
+        '</' tag '>'
+    }
 }
 ```
 # JSON example
@@ -94,21 +101,25 @@ value [
     'true' 'false' 'null'
 ]
 
-string {
-    '"' [ char escape ]*  '"'
+string do {
+    char &[ u ~`all control character` ]
+    `control character` [ '"' '\\' '/' 'b' 'f' 'n' 'r' 't' ]
+    `all control character` [ `control character` 'u' ]
+    escape {
+        '\\' [ `control character` `escape escape` ]
+    }
+    `escape escape` { 'u' `hexadecimal digits`4 }
+    {
+        '"' [ char escape ]*  '"'
+    }
 }
-char &[ u ~`all control character` ]
-`control character` [ '"' '\\' '/' 'b' 'f' 'n' 'r' 't' ]
-`all control character` [ `control character` 'u' ]
-escape {
-    '\\' [ `control character` `escape escape` ]
-}
-`escape escape` { 'u' `hexadecimal digits`4 }
 
-number {
-    '-'? int { '.' digit+ }? index? 
+number do { 
+    digit '0'-'9'
+    int [ '0' { '1'-'9' digit* } ]
+    index 'e'i ['+' '-']? digit+
+    {
+        '-'? int { '.' digit+ }? index? 
+    }
 }
-digit '0'-'9'
-int [ '0' { '1'-'9' digit* } ]
-index 'e'i ['+' '-']? digit+
 ```
