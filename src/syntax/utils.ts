@@ -1,4 +1,4 @@
-import { ISyntax, ASyntax, syntax, lexical, group, option, range } from "./ref_all";
+import { ISyntax, syntax, lexical, group, option, range, item } from "./ref_all";
 
 export type unset = (...v: ISyntax[]) => void
 export function body_func_call(fn: BodyFunc, arr?: ISyntax[]) {
@@ -20,6 +20,7 @@ export type otype = {
     syntax: typeof syntax,
     lexical: typeof lexical,
     group: typeof group,
+    item: typeof item,
     option: typeof option,
     range: typeof range
 }
@@ -27,7 +28,7 @@ export type BodyFunc = (() => IterableIterator<ISyntax>) | ((this: Make, ctx: Ma
 export type Make = RemoveParentUnsetObject<otype>
 export function Maker(push: (v: ISyntax) => void, unset: unset): RemoveParentUnsetObject<otype> {
     const o: otype = {
-        syntax, lexical, group, option, range
+        syntax, lexical, group, item, option, range
     }
     for (const key in o) {
         const element = o[key]
