@@ -10,7 +10,8 @@
     "rollup:dev": "rollup -c rollup.config.test.js",
     "rollup:dev:watch": "rollup -c rollup.config.test.js -w",
     "server": "node ./test/server/test.server.js 3000",
-    "dev": "node ./dev/dev.js"
+    "dev": "node ./dev/dev.js",
+    "antlr4ts": "cd ./antlr && antlr4ts -visitor ./Synph.g4"
   },
   "repository": {
     "type": "git",
@@ -28,10 +29,11 @@
     "@types/koa-route": "^3.2.4",
     "@types/koa-send": "^4.1.2",
     "@types/koa-static": "^4.0.1",
-    "@types/react": "^16.8.13",
+    "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
-    "@types/rollup-plugin-commonjs": "^9.2.0",
-    "@types/rollup-plugin-node-resolve": "^4.0.0",
+    "@types/rollup-plugin-commonjs": "^9.3.1",
+    "@types/rollup-plugin-node-resolve": "^4.1.0",
+    "antlr4ts-cli": "^0.5.0-alpha.3",
     "koa": "^2.7.0",
     "koa-mount": "^4.0.0",
     "koa-route": "^3.2.0",
@@ -39,12 +41,13 @@
     "koa-static": "^5.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "rollup": "^1.10.0",
+    "rollup": "^1.11.3",
     "rollup-plugin-commonjs": "^9.3.4",
-    "rollup-plugin-node-resolve": "^4.2.3",
-    "typescript": "^3.4.3"
+    "rollup-plugin-node-resolve": "^4.2.4",
+    "typescript": "^3.4.5"
   },
   "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.3",
     "rollup-plugin-typescript2": "^0.20.1",
     "uids": "^1.0.2"
   }
