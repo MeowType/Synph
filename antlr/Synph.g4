@@ -435,17 +435,81 @@ STRING:
 	| '\'' SingleStringCharacter* '\'';
 QUOTREF: '`' ('\\`' | ~'`')* '`';
 
-specialChar: 'u' | 'd' | 'n' |'t';
+specialChar:
+	'any'
+	| 'u'
+	| 'd'
+	| 'n'
+	| 't'
+	| DIGIT+ 't'
+	| 'nt'
+	| 'n' DIGIT+ 't'
+	| 'nmt'
+	| 'n' DIGIT+ 'mt'
+	| 'et'
+	| 'emt'
+	| 'w'
+	| 'aw'
+	| 'a'
+	| 's'
+	| 'b'
+	| 'soa'
+	| 'eoa';
+suffix: 'i';
 
 name: ID | QUOTREF;
 group: '{' body* '}';
 orGroup: '[' body* ']';
 andGroup: '&[' body* ']';
-range: STRING '-' STRING;
+token: STRING suffix?;
+range: token '-' token;
 not: '~' body;
-body: not | group | orGroup | andGroup | name | range | STRING;
+ignore: '!' body;
+body:
+	(
+		not
+		| ignore
+		| group
+		| orGroup
+		| andGroup
+		| name
+		| range
+		| token
+		| specialChar suffix?
+	) loop?;
 
 alias: name body;
 
-END: '\n' | '\r' | '\r\n' | ';';
+loop: loopBy? loopType;
+loopBy: '(' body* ')';
+loopType:
+	'*'
+	| '?'
+	| '+'
+	| DIGIT+
+	| DIGIT+ '..' DIGIT+
+	| '..' DIGIT+
+	| '<=' DIGIT+
+	| DIGIT+ '..'
+	| DIGIT+ '+'
+	| '>=' DIGIT+
+	| '..<' DIGIT+
+	| '<' DIGIT+
+	| DIGIT+ '<..'
+	| '>' DIGIT+
+	| DIGIT+ '?'
+	| DIGIT+ '<..?'
+	| '>' DIGIT+ '?'
+	| DIGIT+ '..' '?'
+	| DIGIT+ '+' '?'
+	| '>=' DIGIT+ '?';
+
+WARP:
+	'\r\n'
+	| '\u2028\u2029'
+	| '\n'
+	| '\r'
+	| '\u2028'
+	| '\u2029';
+END: WARP | ';';
 root: (alias (END alias*))?;
