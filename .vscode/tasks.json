@@ -15,7 +15,7 @@
         },
         {
             "type": "npm",
-            "script": "antlr4ts",
+            "script": "antlr4",
             "problemMatcher": []
         }
     ]

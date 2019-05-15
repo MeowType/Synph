@@ -9,9 +9,11 @@
     "tsc:dev:watch": "tsc -w -p tsconfig.test.json",
     "rollup:dev": "rollup -c rollup.config.test.js",
     "rollup:dev:watch": "rollup -c rollup.config.test.js -w",
+    "rollup:dev:parser": "rollup -c rollup.config.test.parser.js",
+    "rollup:dev:parser:watch": "rollup -c rollup.config.test.parser.js -w",
     "server": "node ./test/server/test.server.js 3000",
     "dev": "node ./dev/dev.js",
-    "antlr4ts": "cd ./antlr && antlr4ts -visitor ./Synph.g4"
+    "antlr": "cd ./antlr && ./ntlr-4.7.2-complete.jar -Dlanguage=JavaScript Synph.g4"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   },
   "homepage": "https://github.com/MeowType/Synph#readme",
   "devDependencies": {
+    "@types/antlr4": "^4.7.0",
     "@types/koa": "^2.0.48",
     "@types/koa-mount": "^3.0.1",
     "@types/koa-route": "^3.2.4",
@@ -33,7 +36,6 @@
     "@types/react-dom": "^16.8.4",
     "@types/rollup-plugin-commonjs": "^9.3.1",
     "@types/rollup-plugin-node-resolve": "^4.1.0",
-    "antlr4ts-cli": "^0.5.0-alpha.3",
     "koa": "^2.7.0",
     "koa-mount": "^4.0.0",
     "koa-route": "^3.2.0",
@@ -44,11 +46,11 @@
     "rollup": "^1.11.3",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-node-resolve": "^4.2.4",
+    "rollup-plugin-typescript2": "^0.20.1",
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "antlr4ts": "^0.5.0-alpha.3",
-    "rollup-plugin-typescript2": "^0.20.1",
+    "antlr4": "^4.7.2",
     "uids": "^1.0.2"
   }
 }

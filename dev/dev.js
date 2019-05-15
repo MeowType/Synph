@@ -2,6 +2,7 @@ const { spawn, spawnSync } = require('child_process')
 
 const commands = [
     'rollup:dev:watch',
+    'rollup:dev:parser:watch',
     'server'
 ]
 
