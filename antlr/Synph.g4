@@ -1,9 +1,19 @@
 grammar Synph;
 
 WS: [\t\u000B\u000C\u0020\u00A0]+ -> channel(HIDDEN);
-LINE: [\r\n\u2028\u2029] -> channel(HIDDEN);
+LINE: [\r\n\u2028\u2029]+ -> channel(HIDDEN);
+BlockStart: '{';
+BlockEnd: '}';
+OrBlockStart: '[';
+OrBlockEnd: ']';
+AndBlockStart: '&[';
+Do: 'do';
+Not: '~';
+Ignore: '!';
+Range: '-';
 
-ID: IdentifierStart IdentifierPart*;
+NameID: IdentifierStart (IdentifierPart* IdentifierEnd)?;
+// ID: IdentifierStart IdentifierPart*;
 fragment IdentifierPart:
 	IdentifierStart
 	| UnicodeCombiningMark
@@ -15,6 +25,12 @@ fragment IdentifierStart:
 	UnicodeLetter
 	| [$_]
 	| '\\' UnicodeEscapeSequence;
+fragment IdentifierEnd:
+	IdentifierStart
+	| UnicodeCombiningMark
+	| UnicodeConnectorPunctuation
+	| '\u200C'
+	| '\u200D';
 fragment UnicodeLetter:
 	[\u0041-\u005A]
 	| [\u0061-\u007A]
@@ -408,13 +424,13 @@ fragment UnicodeConnectorPunctuation:
 	| [\uFF3F]
 	| [\uFF65];
 
-INT: DIGIT+;
-fragment DIGIT: [0-9];
+fragment Int: Digit+;
+fragment Digit: [0-9];
 fragment HexDigit: [0-9a-fA-F];
 
 fragment EscapeSequence:
 	CharacterEscapeSequence
-	| '0' // no digit ahead! TODO
+	| '0' 
 	| HexEscapeSequence
 	| UnicodeEscapeSequence
 	| ExtendedUnicodeEscapeSequence;
@@ -430,22 +446,22 @@ fragment NonEscapeCharacter: ~['"\\bfnrtv0-9xu\r\n];
 
 fragment DoubleStringCharacter: ~["\\] | '\\' EscapeSequence;
 fragment SingleStringCharacter: ~['\\] | '\\' EscapeSequence;
-STRING:
+String:
 	'"' DoubleStringCharacter* '"'
 	| '\'' SingleStringCharacter* '\'';
-QUOTREF: '`' ('\\`' | ~'`')* '`';
+QuotRef: '`' ('\\`' | ~'`')* '`';
 
-specialChar:
+SpecialChar:
 	'any'
 	| 'u'
 	| 'd'
 	| 'n'
 	| 't'
-	| DIGIT+ 't'
+	| Int 't'
 	| 'nt'
-	| 'n' DIGIT+ 't'
+	| 'n' Int 't'
 	| 'nmt'
-	| 'n' DIGIT+ 'mt'
+	| 'n' Int 'mt'
 	| 'et'
 	| 'emt'
 	| 'w'
@@ -455,61 +471,58 @@ specialChar:
 	| 'b'
 	| 'soa'
 	| 'eoa';
-suffix: 'i';
+Suffix: 'i';
 
-name: ID | QUOTREF;
-group: '{' body* '}';
-orGroup: '[' body* ']';
-andGroup: '&[' body* ']';
-token: STRING suffix?;
-range: token '-' token;
-not: '~' body;
-ignore: '!' body;
+name: NameID | QuotRef;
+group: BlockStart body* BlockEnd;
+orGroup: OrBlockStart body* OrBlockEnd;
+andGroup: AndBlockStart body* OrBlockEnd;
+token: String;
+range: token Range token;
+not: Not body;
+ignore: Ignore body;
 body:
-	(
-		not
-		| ignore
-		| group
-		| orGroup
-		| andGroup
-		| name
-		| range
-		| token
-		| specialChar suffix?
-	) loop?;
+	not loop?
+	| subrange
+	| ignore loop?
+	| group Suffix? loop?
+	| orGroup Suffix? loop?
+	| andGroup Suffix? loop?
+	| name loop?
+	| range Suffix? loop?
+	| token Suffix? loop?
+	| SpecialChar Suffix? loop?
+	| var loop?;
 
 alias: name body;
 
-loop: loopBy? loopType;
+loop: loopBy? LoopType;
 loopBy: '(' body* ')';
-loopType:
+LoopType:
 	'*'
 	| '?'
 	| '+'
-	| DIGIT+
-	| DIGIT+ '..' DIGIT+
-	| '..' DIGIT+
-	| '<=' DIGIT+
-	| DIGIT+ '..'
-	| DIGIT+ '+'
-	| '>=' DIGIT+
-	| '..<' DIGIT+
-	| '<' DIGIT+
-	| DIGIT+ '<..'
-	| '>' DIGIT+
-	| DIGIT+ '?'
-	| DIGIT+ '<..?'
-	| '>' DIGIT+ '?'
-	| DIGIT+ '..' '?'
-	| DIGIT+ '+' '?'
-	| '>=' DIGIT+ '?';
+	| Int
+	| Int '..' Int
+	| '..' Int
+	| '<=' Int
+	| Int '..'
+	| Int '+'
+	| '>=' Int
+	| '..<' Int
+	| '<' Int
+	| Int '<..'
+	| '>' Int
+	| Int '?'
+	| Int '<..?'
+	| '>' Int '?'
+	| Int '..' '?'
+	| Int '+' '?'
+	| '>=' Int '?';
 
-WARP:
-	'\r\n'
-	| '\u2028\u2029'
-	| '\n'
-	| '\r'
-	| '\u2028'
-	| '\u2029';
-END: WARP | ';';
-root: (alias (END alias*))?;
+var: name '=' body;
+subrange: Do '{' block? body '}';
+
+End: ';';
+block: alias (End? alias)*;
+root: block?;

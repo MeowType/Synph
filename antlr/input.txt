@@ -1,0 +1,34 @@
+object {
+    '{' { key=string ':' value=value }(',')* '}'
+}
+
+array {
+    '[' value(',')* ']'
+}
+
+value [
+    string number object array
+    'true' 'false' 'null'
+]
+
+string do {
+    char &[ u ~`all control character` ]
+    `control character` [ '"' '\\' '/' 'b' 'f' 'n' 'r' 't' ]
+    `all control character` [ `control character` 'u' ]
+    escape {
+        '\\' [ `control character` `escape escape` ]
+    }
+    `escape escape` { 'u' `hexadecimal digits`4 }
+    {
+        '"' [ char escape ]*  '"'
+    }
+}
+
+number do { 
+    digit '0'-'9'
+    int [ '0' { '1'-'9' digit* } ]
+    index { 'e'i ['+' '-']? digit+ }
+    {
+        '-'? int { '.' digit+ }? index? 
+    }
+}

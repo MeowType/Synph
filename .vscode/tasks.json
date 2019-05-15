@@ -12,6 +12,11 @@
             "type": "npm",
             "script": "rollup:dev",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "antlr4ts",
+            "problemMatcher": []
         }
     ]
 }

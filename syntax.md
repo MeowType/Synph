@@ -119,7 +119,7 @@ string do {
 number do { 
     digit '0'-'9'
     int [ '0' { '1'-'9' digit* } ]
-    index 'e'i ['+' '-']? digit+
+    index { 'e'i ['+' '-']? digit+ }
     {
         '-'? int { '.' digit+ }? index? 
     }
