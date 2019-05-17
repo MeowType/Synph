@@ -5,6 +5,10 @@ pull_request_rules:
       - author=imgbot[bot]
       - author=renovate-bot
       - author=imgbot-bot
+      - author=renovatebot
+      - author=imgbotbot
+      - author=renovate
+      - author=imgbot
       - base=master
     actions:
       merge:
