@@ -3,7 +3,6 @@ pull_request_rules:
     conditions:
       - author=renovate[bot]
       - author=imgbot[bot]
-      - status-success=Travis CI - Pull Request
       - base=master
     actions:
       merge:
