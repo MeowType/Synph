@@ -1,24 +1,14 @@
-import { Loop, BodyFunc, body_func_call, unset } from "."
+import { Loop, BodyFunc, body_func_call, unset, Nullable } from "."
 import { uid } from 'uids'
-import { EventHandler } from "react";
 
-export type GetEventsKey<A extends React.DOMAttributes<HTMLElement>> = { [K in keyof A]: A[K] extends EventHandler<any> ? K : never }
-export type EventsKey = GetEventsKey<React.DOMAttributes<HTMLElement>>[keyof GetEventsKey<React.DOMAttributes<HTMLElement>>]
-export type GetEvents<A extends React.DOMAttributes<HTMLElement>, K extends keyof A, S> = { [P in K]: (cb: A[P]) => S }
-export type Events<S> = GetEvents<React.DOMAttributes<HTMLElement>, EventsKey, S>
-export type ASyntaxEvents<S> = { [K in keyof Events<S>]: Events<S>[K] & { eventlist: Set<React.DOMAttributes<HTMLElement>[EventsKey]> } }
-export type GetCallEvents<A extends React.DOMAttributes<HTMLElement>, K extends keyof A> = { [P in K]: A[P] }
-export type CallEvents = GetCallEvents<React.DOMAttributes<HTMLElement>, EventsKey>
-
-export type ISyntax = TheASyntax<any>
-export interface TheASyntax<T extends TheASyntax<T>> extends ASyntaxEvents<T> { }
-export abstract class TheASyntax<T extends TheASyntax<T>> {
+export type ISyntax = ASyntax
+export abstract class ASyntax {
     id: string
-    name: string
+    name?: string
     loopfor?: Loop
     middleItems?: ISyntax[]
     private unset: unset
-    constructor(thisunset: unset, name?: string) {
+    constructor(thisunset: unset, name: Nullable<string>) {
         if (name != null) this.name = name
         this.id = uid()
         this.unset = thisunset
@@ -188,28 +178,3 @@ export abstract class TheASyntax<T extends TheASyntax<T>> {
         return this
     }
 }
-export const ASyntax: typeof TheASyntax = new Proxy(TheASyntax, {
-    construct(target, arg, newTarget) {
-        return new Proxy<ISyntax>(Reflect.construct(target, arg, newTarget), {
-            get(target, p, rec) {
-                if (typeof p === 'string') {
-                    if (p.substr(0, 2) === 'on') {
-                        if (Reflect.has(target, p)) {
-                            return Reflect.get(target, p, rec)
-                        } else {
-                            const eventlist = new Set<React.DOMAttributes<HTMLElement>[EventsKey]>()
-                            function reg(cb: React.DOMAttributes<HTMLElement>[EventsKey]) {
-                                eventlist.add(cb)
-                                return rec
-                            }
-                            (reg as any).eventlist = eventlist
-                            Reflect.set(target, p, reg, rec)
-                            return reg
-                        }
-                    }
-                }
-                return Reflect.get(target, p, rec)
-            }
-        })
-    }
-})

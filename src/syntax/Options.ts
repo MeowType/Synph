@@ -1,16 +1,16 @@
-import { ASyntax, ISyntax, BodyFunc, body_func_call, unset } from ".";
+import { ASyntax, ISyntax, BodyFunc, body_func_call, unset, Nullable } from ".";
 
-export class Options extends ASyntax<Options> {
+export class Options extends ASyntax {
     items: ISyntax[]
-    constructor(unset: unset, name: string, items: ISyntax[]) {
+    constructor(unset: unset, name: Nullable<string>, items: ISyntax[]) {
         super(unset, name)
         this.items = items
     }
 }
 export function option(unset: unset, item: ISyntax, ...items: ISyntax[]): Options
 export function option(unset: unset, items: BodyFunc | ISyntax): Options
-export function option(unset: unset, name: string, item: ISyntax, ...items: ISyntax[]): Options
-export function option(unset: unset, name: string, items: BodyFunc | ISyntax): Options
+export function option(unset: unset, name: Nullable<string>, item: ISyntax, ...items: ISyntax[]): Options
+export function option(unset: unset, name: Nullable<string>, items: BodyFunc | ISyntax): Options
 export function option(unset: unset, ...items: any[]) {
     const [first] = items
     if (typeof first === 'string') {

@@ -1,6 +1,6 @@
-import { ASyntax, unset } from ".";
+import { ASyntax, unset, Nullable } from ".";
 
-export class Syntax extends ASyntax<Syntax> { }
-export function syntax(unset: unset, name: string): Syntax {
+export class Syntax extends ASyntax { }
+export function syntax(unset: unset, name: Nullable<string>): Syntax {
     return new Syntax(unset, name)
 }

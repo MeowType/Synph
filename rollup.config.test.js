@@ -1,25 +1,28 @@
+import vue from 'rollup-plugin-vue'
+import commonjs from 'rollup-plugin-commonjs'
+import css from 'rollup-plugin-css-only'
 import typescript from 'rollup-plugin-typescript2'
 import resolve from 'rollup-plugin-node-resolve'
 
 export default {
-    input: './test/test.tsx',
+    input: 'src/test/test.ts',
     output: {
-        file: './test/test.js',
         format: 'iife',
-        name: 'synph_test',
-        sourcemap: true,
-        globals: {
-            'react': 'React',
-            'react-dom': 'ReactDOM'
-        }
+        name: 'synph',
+        sourcemap: false,
+        file: 'test/test.js'
     },
+    external: ['vue', 'vue-property-decorator'],
     plugins: [
         typescript({
-            tsconfig: './tsconfig.test.json'
+            tsconfig: './tsconfig.test.json',
+            clean: true,
         }),
         resolve(),
-    ],
-    external: [
-        'react', 'react-dom'
+        commonjs(),
+        css(),
+        vue({
+            css: false
+        })
     ]
-};
+}

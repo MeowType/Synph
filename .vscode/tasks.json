@@ -5,17 +5,12 @@
     "tasks": [
         {
             "type": "npm",
-            "script": "dev",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
             "script": "rollup:dev",
             "problemMatcher": []
         },
         {
             "type": "npm",
-            "script": "antlr4",
+            "script": "dev",
             "problemMatcher": []
         }
     ]

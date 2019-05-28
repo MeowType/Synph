@@ -1,0 +1,10 @@
+import Synph from './Synph.vue'
+// import * from './synph/sp_syn'
+// import SynphSyntax from './synph/Syntax.vue'
+// import SynphLexical from './synph/Lexical.vue'
+import SynphGroup from './synph/Group.vue'
+import SynphItem from './synph/Item.vue'
+// import SynphOption from './synph/Option.vue'
+// import SynphLoop from './synph/Loop.vue'
+export { Synph, SynphItem, SynphGroup}
+export * from './syntax'

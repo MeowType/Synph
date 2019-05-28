@@ -3,15 +3,24 @@
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
-        "jsx": "react",
-        "outDir": "tsout",
-        "declaration": true,
-        "declarationDir": "type",
+        "outDir": "test/tsout",
+        "strict": true,
+        "jsx": "preserve",
+        "importHelpers": true,
+        "sourceMap": true,
         "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+    },
+    "paths": {
+        "@/*": [
+            "src/*"
+        ]
     },
     "include": [
         "./src/**/*.ts",
-        "./src/**/*.tsx"
+        "./src/**/*.vue",
+        "./src/**/*.tsx",
     ],
     "exclude": [
         "tsout",

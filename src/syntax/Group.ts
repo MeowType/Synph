@@ -1,16 +1,17 @@
 import { ASyntax, ISyntax, BodyFunc, body_func_call, unset } from ".";
+import { Nullable } from './utils';
 
-export class Group extends ASyntax<Group> {
+export class Group extends ASyntax {
     items: ISyntax[]
-    constructor(unset: unset, name: string, items: ISyntax[]) {
+    constructor(unset: unset, name: Nullable<string>, items: ISyntax[]) {
         super(unset, name)
         this.items = items
     }
 }
 export function group(unset: unset, ...items: ISyntax[]): Group
 export function group(unset: unset, items: BodyFunc | ISyntax): Group
-export function group(unset: unset, name: string, ...items: ISyntax[]): Group
-export function group(unset: unset, name: string, items: BodyFunc | ISyntax): Group
+export function group(unset: unset, name: Nullable<string>, ...items: ISyntax[]): Group
+export function group(unset: unset, name: Nullable<string>, items: BodyFunc | ISyntax): Group
 export function group(unset: unset, ...items: any[]) {
     const [first] = items
     if (typeof first === 'string') {

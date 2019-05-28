@@ -1,15 +1,15 @@
-import { ASyntax, ISyntax, BodyFunc, body_func_call, unset } from ".";
+import { ASyntax, ISyntax, BodyFunc, body_func_call, unset, Nullable } from ".";
 
-export class Item extends ASyntax<Item> {
+export class Item extends ASyntax {
     items: ISyntax[]
-    constructor(unset: unset, name: string, items: ISyntax[]) {
+    constructor(unset: unset, name: Nullable<string>, items: ISyntax[]) {
         super(unset, name)
         this.items = items
     }
 }
-export function item(unset: unset, name: string, ...items: ISyntax[]): Item
-export function item(unset: unset, name: string, items: BodyFunc | ISyntax): Item
-export function item(unset: unset, name: string, ...items: any[]) {
+export function item(unset: unset, name: Nullable<string>, ...items: ISyntax[]): Item
+export function item(unset: unset, name: Nullable<string>, items: BodyFunc | ISyntax): Item
+export function item(unset: unset, name: Nullable<string>, ...items: any[]) {
     const [, item, ...otheritems] = items
     if (typeof item === 'function') {
         return new Item(unset, name, body_func_call(item as BodyFunc))

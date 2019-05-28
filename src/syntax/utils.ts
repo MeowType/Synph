@@ -5,12 +5,12 @@ export function body_func_call(fn: BodyFunc, arr?: ISyntax[]) {
     if (arr == null) arr = []
     if (typeof fn !== 'function') return arr
     const unsetlist: Set<ISyntax> = new Set
-    if (fn[Symbol.toStringTag] === 'GeneratorFunction') {
+    if ((fn as any)[Symbol.toStringTag] === 'GeneratorFunction') {
         arr.push(...(fn as any)())
     } else {
-        const items = []
-        const ctx = Maker(i => items.push(i), (...v: ISyntax[]) => v.forEach(v => unsetlist.add(v)))
-        fn.call(ctx, ctx)
+        const items: ISyntax[] = []
+        const ctx = Maker(i => items.push(i), (...v: ISyntax[]) => v.forEach(v => unsetlist.add(v)));
+        (fn as any).call(ctx, ctx)
         arr.push(...items)
     }
     return unsetlist.size == 0 ? arr : arr.filter(i => !unsetlist.delete(i))
@@ -31,9 +31,9 @@ export function Maker(push: (v: ISyntax) => void, unset: unset): RemoveParentUns
         syntax, lexical, group, item, option, range
     }
     for (const key in o) {
-        const element = o[key]
+        const element = (o as any)[key]
         if (typeof element === 'function') {
-            o[key] = function () {
+            (o as any)[key] = function () {
                 const r = element.call(this, unset, ...arguments)
                 push(r)
                 return r
@@ -48,3 +48,5 @@ export type TailFn<F extends (head: any, ...tails: any[]) => any> = (...args: Ta
 export type RemoveParentUnset<F> =
     F extends (unset: unset, ...tails: any[]) => any ? TailFn<F>: F
 export type RemoveParentUnsetObject<O> = { [K in keyof O]: RemoveParentUnset<O[K]> }
+
+export type Nullable<T> = T | null | undefined
