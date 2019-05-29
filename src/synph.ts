@@ -1,7 +1,6 @@
 import Synph from './Synph.vue'
 // import * from './synph/sp_syn'
 // import SynphSyntax from './synph/Syntax.vue'
-// import SynphLexical from './synph/Lexical.vue'
 import SynphLexical from './synph/Lexical.vue'
 import SynphGroup from './synph/Group.vue'
 import SynphItem from './synph/Item.vue'
