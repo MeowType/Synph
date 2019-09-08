@@ -22,6 +22,28 @@
 ## loop
 - \<any> \<loop type>
 - \<any> `(` \<loop by> `)` \<loop type>
+    ```
+    when a(b)+
+    match:
+    a
+    a b
+    a b a
+    a b a b
+    ```
+- \<any> `@` `(` \<loop by and loop end> `)` \<loop type>
+    ```
+    when a(@b)+
+    match:
+    a b
+    a b a b
+    ```
+- \<any> `~@` `(` \<loop by and no loop end> `)` \<loop type>
+    ```
+    when a(~@b)+
+    match:
+    a
+    a b a
+    ```
 ## loop type
 |type|mean|  
 |-|-|  
@@ -40,7 +62,6 @@
 ## not
 - `~` \<any>
 ## special char
-Special characters cannot be in the token string  
 
 |char|mean|  
 |-|-|  
@@ -63,6 +84,7 @@ Special characters cannot be in the token string
 |`b`|word bound|
 |`soa`|start of all|
 |`eoa`|end of all|
+
 ## suffix
 Suffixes can be used with special characters  
 
