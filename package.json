@@ -27,7 +27,7 @@
   "homepage": "https://github.com/MeowType/Synph#readme",
   "devDependencies": {
     "@types/antlr4": "4.7.0",
-    "@types/koa": "2.0.48",
+    "@types/koa": "2.11.4",
     "@types/koa-mount": "3.0.1",
     "@types/koa-route": "3.2.4",
     "@types/koa-send": "4.1.2",
@@ -36,7 +36,7 @@
     "@types/react-dom": "16.8.4",
     "@types/rollup-plugin-commonjs": "9.3.1",
     "@types/rollup-plugin-node-resolve": "4.1.0",
-    "koa": "2.7.0",
+    "koa": "2.13.0",
     "koa-mount": "4.0.0",
     "koa-route": "3.2.0",
     "koa-send": "5.0.0",
